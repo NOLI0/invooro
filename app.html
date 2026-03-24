@@ -124,86 +124,118 @@
             height: 100%;
         }
         .sidebar {
-            width: 280px;
-            background: white;
-            border-right: 1px solid #E5E7EB;
+            width: 240px;
+            background: #1E1B4B;
+            border-right: none;
             display: flex;
             flex-direction: column;
-            padding: 24px 20px;
+            padding: 0;
+        }
+        .sidebar-top {
+            padding: 28px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
         .sidebar-logo {
-            font-size: 18px;
-            font-weight: 700;
-            color: #5B21B6;
-            margin-bottom: 32px;
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            letter-spacing: -0.5px;
         }
-        .sidebar-logo svg { width: 24px; height: 24px; }
+        .sidebar-logo .logo-mark {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .sidebar-logo .logo-mark svg { width: 18px; height: 18px; color: white; }
         .sidebar-menu {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 2px;
             flex: 1;
+            padding: 16px 12px;
+        }
+        .menu-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 8px 4px;
+            margin-top: 8px;
         }
         .menu-item {
-            padding: 12px 16px;
+            padding: 10px 12px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 500;
-            color: #6B7280;
-            transition: all 0.2s ease;
+            color: rgba(255,255,255,0.55);
+            transition: all 0.15s ease;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        .menu-item:hover { background: #F3F4F6; color: #5B21B6; }
-        .menu-item.active { background: #EDE9FE; color: #5B21B6; }
+        .menu-item svg { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.7; }
+        .menu-item:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); }
+        .menu-item:hover svg { opacity: 1; }
+        .menu-item.active { background: rgba(139,92,246,0.25); color: #C4B5FD; }
+        .menu-item.active svg { opacity: 1; color: #C4B5FD; }
         .sidebar-footer {
-            padding-top: 20px;
-            border-top: 1px solid #E5E7EB;
+            padding: 16px 16px 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
             background: linear-gradient(135deg, #8B5CF6, #5B21B6);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 12px;
+            flex-shrink: 0;
         }
-        .user-info { flex: 1; }
-        .user-name { font-size: 13px; font-weight: 600; color: #1F2937; }
-        .user-email { font-size: 12px; color: #9CA3AF; margin-top: 2px; }
+        .user-info { flex: 1; min-width: 0; }
+        .user-name { font-size: 13px; font-weight: 600; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .user-email { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .logout-btn {
+            background: none; border: none; cursor: pointer;
+            color: rgba(255,255,255,0.3); padding: 4px;
+            border-radius: 4px; transition: color 0.15s;
+            flex-shrink: 0;
+        }
+        .logout-btn:hover { color: rgba(255,255,255,0.7); }
         .content {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
-            background: #FAFAFA;
+            background: #F5F4FA;
         }
         .header {
             background: white;
-            padding: 24px 40px;
+            padding: 20px 36px;
             border-bottom: 1px solid #E5E7EB;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .header-left h1 { font-size: 24px; font-weight: 700; color: #1F2937; }
-        .header-date { font-size: 13px; color: #6B7280; margin-top: 4px; }
-        .header-actions { display: flex; gap: 12px; }
+        .header-left h1 { font-size: 20px; font-weight: 700; color: #1E1B4B; }
+        .header-date { font-size: 12px; color: #9CA3AF; margin-top: 3px; }
+        .header-actions { display: flex; gap: 10px; align-items: center; }
         .content-main {
             flex: 1;
-            padding: 40px;
+            padding: 32px 36px;
             overflow-y: auto;
         }
 
@@ -424,28 +456,53 @@
         /* === KPI CARDS === */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
         }
         .kpi-card {
             background: white;
-            padding: 24px;
+            padding: 20px 22px;
             border-radius: 12px;
             border: 1px solid #E5E7EB;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
         }
-        .kpi-label { font-size: 13px; color: #6B7280; font-weight: 500; margin-bottom: 8px; }
-        .kpi-value { font-size: 28px; font-weight: 700; color: #1F2937; }
-        .kpi-subtext { font-size: 12px; color: #9CA3AF; margin-top: 8px; }
+        .kpi-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .kpi-icon svg { width: 20px; height: 20px; }
+        .kpi-icon.purple { background: #EDE9FE; color: #7C3AED; }
+        .kpi-icon.green { background: #D1FAE5; color: #059669; }
+        .kpi-icon.amber { background: #FEF3C7; color: #D97706; }
+        .kpi-icon.blue { background: #DBEAFE; color: #2563EB; }
+        .kpi-body { flex: 1; }
+        .kpi-label { font-size: 12px; color: #6B7280; font-weight: 500; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .kpi-value { font-size: 26px; font-weight: 800; color: #1E1B4B; letter-spacing: -0.5px; }
+        .kpi-subtext { font-size: 11.5px; color: #9CA3AF; margin-top: 5px; display: flex; align-items: center; gap: 4px; }
+        .kpi-trend-up { color: #059669; font-weight: 600; }
+        .kpi-trend-warn { color: #D97706; font-weight: 600; }
 
         /* === RECENT EXTRACTIONS === */
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
         .recent-section {
             background: white;
-            padding: 24px;
+            padding: 22px 24px;
             border-radius: 12px;
             border: 1px solid #E5E7EB;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
         }
         .recent-section h3 { font-size: 16px; font-weight: 700; color: #1F2937; margin-bottom: 20px; }
         .extraction-item {
@@ -524,25 +581,46 @@
 
             <!-- SIDEBAR -->
             <div class="sidebar">
-                <div class="sidebar-logo">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                        <polyline points="13 2 13 9 20 9"></polyline>
-                    </svg>
-                    Invooro
+                <div class="sidebar-top">
+                    <div class="sidebar-logo">
+                        <div class="logo-mark">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                <polyline points="13 2 13 9 20 9"></polyline>
+                            </svg>
+                        </div>
+                        Invooro
+                    </div>
                 </div>
                 <div class="sidebar-menu">
-                    <div class="menu-item active" onclick="switchMenu('dashboard', event)">📊 Tableau de bord</div>
-                    <div class="menu-item" onclick="switchMenu('invoices', event)">📄 Factures</div>
-                    <div class="menu-item" onclick="switchMenu('reports', event)">📈 Rapports</div>
-                    <div class="menu-item" onclick="switchMenu('settings', event)">⚙️ Paramètres</div>
+                    <div class="menu-label">Menu</div>
+                    <div class="menu-item active" onclick="switchMenu('dashboard', event)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                        Tableau de bord
+                    </div>
+                    <div class="menu-item" onclick="switchMenu('invoices', event)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+                        Factures
+                    </div>
+                    <div class="menu-item" onclick="switchMenu('reports', event)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        Rapports
+                    </div>
+                    <div class="menu-label">Compte</div>
+                    <div class="menu-item" onclick="switchMenu('settings', event)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Paramètres
+                    </div>
                 </div>
                 <div class="sidebar-footer">
-                    <div class="avatar">NL</div>
+                    <div class="avatar" id="sidebarAvatar">NL</div>
                     <div class="user-info">
-                        <div class="user-name">Nour L.</div>
-                        <div class="user-email">nour@startup.fr</div>
+                        <div class="user-name" id="sidebarName">Nour L.</div>
+                        <div class="user-email" id="sidebarEmail">nour@invooro.com</div>
                     </div>
+                    <button class="logout-btn" onclick="logout()" title="Se déconnecter">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    </button>
                 </div>
             </div>
 
@@ -550,21 +628,29 @@
             <div class="content">
                 <div class="header">
                     <div class="header-left">
-                        <h1 id="headerTitle">Bonjour Nour 👋</h1>
+                        <h1 id="headerTitle">Tableau de bord</h1>
                         <div class="header-date" id="headerDate"></div>
                     </div>
                     <div class="header-actions">
-                        <button class="btn btn-primary" onclick="openExtractionModal()">+ Nouvelle extraction</button>
+                        <button class="btn btn-primary" onclick="openExtractionModal()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Nouvelle extraction
+                        </button>
                     </div>
                 </div>
 
                 <!-- EMPTY STATE -->
                 <div class="content-main" id="emptyStateArea">
                     <div class="empty-state">
-                        <div class="empty-icon">📋</div>
+                        <div style="width:72px;height:72px;background:#EDE9FE;border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+                        </div>
                         <h2>Aucune extraction encore</h2>
-                        <p>Lancez votre première recherche de factures pour voir ici vos résultats organisés.</p>
-                        <button class="btn btn-primary" onclick="openExtractionModal()">+ Nouvelle extraction</button>
+                        <p>Lancez votre première recherche de factures pour voir ici vos résultats organisés et exportables.</p>
+                        <button class="btn btn-primary" onclick="openExtractionModal()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Nouvelle extraction
+                        </button>
                     </div>
                 </div>
 
@@ -572,23 +658,48 @@
                 <div class="content-main hidden" id="dashboardContent">
                     <div class="kpi-grid">
                         <div class="kpi-card">
-                            <div class="kpi-label">Factures ce mois</div>
-                            <div class="kpi-value">7</div>
-                            <div class="kpi-subtext">+2 par rapport au mois dernier</div>
+                            <div class="kpi-icon purple">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                            </div>
+                            <div class="kpi-body">
+                                <div class="kpi-label">Factures ce mois</div>
+                                <div class="kpi-value" id="kpiCount">7</div>
+                                <div class="kpi-subtext"><span class="kpi-trend-up">↑ +2</span> vs mois dernier</div>
+                            </div>
                         </div>
                         <div class="kpi-card">
-                            <div class="kpi-label">Total TTC</div>
-                            <div class="kpi-value">1 887,44 €</div>
-                            <div class="kpi-subtext">Mars 2026</div>
+                            <div class="kpi-icon green">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            </div>
+                            <div class="kpi-body">
+                                <div class="kpi-label">Total HT</div>
+                                <div class="kpi-value" id="kpiHT">1 577,80 €</div>
+                                <div class="kpi-subtext">TVA : <strong style="color:#374151">309,63 €</strong></div>
+                            </div>
                         </div>
                         <div class="kpi-card">
-                            <div class="kpi-label">À vérifier</div>
-                            <div class="kpi-value">1</div>
-                            <div class="kpi-subtext">Facture avec montant en image</div>
+                            <div class="kpi-icon blue">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                            </div>
+                            <div class="kpi-body">
+                                <div class="kpi-label">Total TTC</div>
+                                <div class="kpi-value" id="kpiTTC">1 887,44 €</div>
+                                <div class="kpi-subtext">Mars 2026</div>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon amber">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            </div>
+                            <div class="kpi-body">
+                                <div class="kpi-label">À vérifier</div>
+                                <div class="kpi-value" id="kpiWarning">1</div>
+                                <div class="kpi-subtext"><span class="kpi-trend-warn">Montant en image</span></div>
+                            </div>
                         </div>
                     </div>
                     <div class="recent-section">
-                        <h3>Extractions récentes</h3>
+                        <div class="section-title">Extractions récentes</div>
                         <div class="extraction-item">
                             <div class="extraction-info">
                                 <h4>Extraction du 24 Mars 2026</h4>
@@ -599,8 +710,11 @@
                                 <div class="extraction-status"><div class="status-dot"></div>Complète</div>
                             </div>
                         </div>
-                        <div style="margin-top: 24px;">
-                            <button class="btn btn-primary" onclick="openExtractionModal()">+ Nouvelle extraction</button>
+                        <div style="margin-top: 20px;">
+                            <button class="btn btn-primary" onclick="openExtractionModal()">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Nouvelle extraction
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -632,9 +746,18 @@
                         </table>
                     </div>
                     <div class="results-actions">
-                        <button class="btn btn-success" onclick="exportExcel(event)">📥 Exporter Excel</button>
-                        <button class="btn" style="background:#7C3AED;color:white;" onclick="exportZip(event)">🗜️ Télécharger PDFs (ZIP)</button>
-                        <div class="export-feedback" id="exportFeedback">✅ Fichier téléchargé avec succès !</div>
+                        <button class="btn btn-success" onclick="exportExcel(event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Exporter Excel
+                        </button>
+                        <button class="btn" style="background:#7C3AED;color:white;" onclick="exportZip(event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 6 12 2 16 6"/><line x1="12" y1="2" x2="12" y2="15"/><path d="M20 21H4a2 2 0 0 1-2-2V7"/><path d="M22 7l-10 8"/></svg>
+                            Télécharger PDFs (ZIP)
+                        </button>
+                        <div class="export-feedback" id="exportFeedback">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Fichier téléchargé avec succès !
+                        </div>
                     </div>
                 </div>
 
@@ -882,7 +1005,7 @@
             alert('Erreur : ' + err.message);
         } finally {
             btn.disabled = false;
-            btn.innerHTML = '📥 Exporter Excel';
+            btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Exporter Excel';
         }
     }
 
@@ -906,7 +1029,7 @@
             alert('Erreur : ' + err.message);
         } finally {
             btn.disabled = false;
-            btn.innerHTML = '🗜️ Télécharger PDFs (ZIP)';
+            btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 6 12 2 16 6"/><line x1="12" y1="2" x2="12" y2="15"/><path d="M20 21H4a2 2 0 0 1-2-2V7"/><path d="M22 7l-10 8"/></svg> Télécharger PDFs (ZIP)';
         }
     }
 
@@ -941,10 +1064,20 @@
             const res = await fetch('/api/me');
             if (res.ok) {
                 currentUser = await res.json();
-                const nameEl = document.getElementById('userName');
-                const emailEl = document.getElementById('userEmail');
-                if (nameEl) nameEl.textContent = currentUser.name || currentUser.email;
-                if (emailEl) emailEl.textContent = currentUser.email;
+                // Update sidebar user info
+                const name = currentUser.name || currentUser.email || '';
+                const email = currentUser.email || '';
+                const initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+                const avatarEl = document.getElementById('sidebarAvatar');
+                const nameEl = document.getElementById('sidebarName');
+                const emailEl = document.getElementById('sidebarEmail');
+                if (avatarEl) avatarEl.textContent = initials || 'U';
+                if (nameEl) nameEl.textContent = name;
+                if (emailEl) emailEl.textContent = email;
+                // Update header greeting
+                const firstName = name.split(' ')[0];
+                const headerTitle = document.getElementById('headerTitle');
+                if (headerTitle) headerTitle.textContent = `Bonjour, ${firstName}`;
                 showScreen('dashboardScreen');
             } else {
                 showScreen('loginScreen');
