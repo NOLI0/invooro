@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(netlify --version)",
+      "Bash(npm install:*)",
+      "Bash(netlify login:*)",
+      "Bash(netlify deploy:*)",
+      "Bash(powershell -command \"Get-Clipboard\")",
+      "Bash(taskkill /PID 17444 /F)",
+      "Bash(powershell -command \"Stop-Process -Id 17444 -Force\")",
+      "Bash(curl -s http://localhost:3000/api/health)"
+    ]
+  }
+}

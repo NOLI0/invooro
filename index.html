@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invooro - Retrouvez vos factures Gmail en 1 clic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --primary: #5B21B6;
+            --primary-light: #8B5CF6;
+            --success: #10B981;
+            --bg-light: #FAFAFA;
+            --text-dark: #1F2937;
+            --text-muted: #6B7280;
+            --border-light: #E5E7EB;
+            --white: #FFFFFF;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --spacing-2xl: 4rem;
+            --spacing-3xl: 6rem;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        /* ==================== UTILITIES ==================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+        }
+        .section-padding {
+            padding: var(--spacing-3xl) 0;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .flex {
+            display: flex;
+        }
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .grid {
+            display: grid;
+        }
+        /* Typography */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--spacing-md);
+        }
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.015em;
+            margin-bottom: var(--spacing-lg);
+        }
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+        }
+        p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+        }
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto var(--spacing-xl);
+        }
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            gap: var(--spacing-xs);
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 6px rgba(91, 33, 182, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: #4c1d95;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px rgba(91, 33, 182, 0.3);
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+        .btn-white {
+            background-color: var(--white);
+            color: var(--primary);
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .btn-large {
+            padding: 1.125rem 3rem;
+            font-size: 1.125rem;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #EDE9FE;
+            color: var(--primary);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+        /* ==================== HEADER & NAV ==================== */
+        header {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem var(--spacing-lg);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+        .nav-links {
+            display: flex;
+            gap: var(--spacing-xl);
+            list-style: none;
+            align-items: center;
+        }
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            position: relative;
+        }
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 1.875rem;
+            }
+            .section-padding {
+                padding: 2rem 0;
+            }
+        }
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 50%, #F0EBFF 100%);
+            padding: var(--spacing-3xl) 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .hero-text {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+        .hero-text h1 {
+            color: var(--text-dark);
+            margin-bottom: var(--spacing-md);
+        }
+        .hero-text p {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+        }
+        .hero-cta {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            justify-content: center;
+            align-items: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+        .hero-cta .btn {
+            width: fit-content;
+        }
+        .cta-note {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .hero-visual {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 0.75rem;
+            padding: var(--spacing-xl);
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.08);
+            margin-top: var(--spacing-2xl);
+            animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .mockup-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .mockup-table-header {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr 0.8fr;
+            gap: var(--spacing-md);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--border-light);
+            margin-bottom: var(--spacing-md);
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .mockup-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr 0.8fr;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid var(--border-light);
+            align-items: center;
+            font-size: 0.95rem;
+        }
+        .mockup-row:last-child {
+            border-bottom: none;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 0.375rem 0.875rem;
+            border-radius: 0.375rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            width: fit-content;
+        }
+        .status-success {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+        .status-pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+        @media (max-width: 768px) {
+            .hero {
+                min-height: auto;
+                padding: var(--spacing-2xl) 0;
+            }
+            .mockup-table-header,
+            .mockup-row {
+                grid-template-columns: 1fr 1fr;
+                gap: var(--spacing-sm);
+            }
+        }
+        /* ==================== SOCIAL PROOF ==================== */
+        .social-proof {
+            background-color: var(--white);
+            padding: var(--spacing-2xl) 0;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+        }
+        .social-proof-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--spacing-xl);
+        }
+        .social-proof-text {
+            color: var(--text-muted);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .logos-grid {
+            display: flex;
+            gap: var(--spacing-xl);
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        .logo-item {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            padding: 0.75rem 1.5rem;
+            background-color: var(--gray-100);
+            border-radius: 0.5rem;
+            transition: var(--transition);
+            cursor: default;
+        }
+        .logo-item:hover {
+            background-color: var(--gray-200);
+            transform: translateY(-2px);
+        }
+        @media (max-width: 768px) {
+            .social-proof-content {
+                flex-direction: column;
+                gap: var(--spacing-lg);
+            }
+            .social-proof-text {
+                white-space: normal;
+            }
+        }
+        /* ==================== PROBLEM SECTION ==================== */
+        .problem-section {
+            background-color: var(--gray-100);
+            padding: var(--spacing-3xl) 0;
+        }
+        .problem-header {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+        }
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-2xl);
+        }
+        .problem-card {
+            background-color: var(--white);
+            padding: var(--spacing-2xl);
+            border-radius: 0.75rem;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+        .problem-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-light);
+        }
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+        }
+        .problem-card h3 {
+            color: var(--text-dark);
+            margin-bottom: var(--spacing-sm);
+        }
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        /* ==================== SOLUTION SECTION ==================== */
+        .solution-section {
+            background-color: var(--white);
+            padding: var(--spacing-3xl) 0;
+        }
+        .solution-header {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+        }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-2xl);
+            position: relative;
+        }
+        .step-card {
+            background: linear-gradient(135deg, var(--white) 0%, var(--gray-100) 100%);
+            padding: var(--spacing-2xl);
+            border-radius: 0.75rem;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            position: relative;
+            transition: var(--transition);
+        }
+        .step-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(91, 33, 182, 0.12);
+        }
+        .step-number {
+            width: 3.5rem;
+            height: 3.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 auto var(--spacing-md);
+            box-shadow: 0 4px 12px rgba(91, 33, 182, 0.3);
+        }
+        .step-card h3 {
+            color: var(--text-dark);
+            margin-bottom: var(--spacing-sm);
+        }
+        .step-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+        /* ==================== FEATURES SECTION ==================== */
+        .features-section {
+            background-color: var(--gray-100);
+            padding: var(--spacing-3xl) 0;
+        }
+        .features-header {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-2xl);
+        }
+        .feature-card {
+            background-color: var(--white);
+            padding: var(--spacing-2xl);
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(91, 33, 182, 0.15);
+            border-color: var(--primary-light);
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);
+            display: inline-block;
+        }
+        .feature-card h3 {
+            color: var(--text-dark);
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.25rem;
+        }
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+        /* ==================== PRICING SECTION ==================== */
+        .pricing-section {
+            background-color: var(--white);
+            padding: var(--spacing-3xl) 0;
+        }
+        .pricing-header {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--spacing-2xl);
+            align-items: flex-start;
+        }
+        .pricing-card {
+            background-color: var(--white);
+            border: 2px solid var(--border-light);
+            border-radius: 0.75rem;
+            padding: var(--spacing-2xl);
+            position: relative;
+            transition: var(--transition);
+        }
+        .pricing-card.popular {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(91, 33, 182, 0.15);
+        }
+        .pricing-card:hover {
+            border-color: var(--primary-light);
+        }
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .pricing-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: var(--spacing-sm);
+        }
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: var(--spacing-xs);
+            line-height: 1;
+        }
+        .pricing-period {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: var(--spacing-lg);
+        }
+        .pricing-features {
+            list-style: none;
+            margin-bottom: var(--spacing-lg);
+        }
+        .pricing-features li {
+            padding: 0.75rem 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .pricing-card .btn {
+            width: 100%;
+            justify-content: center;
+            margin-top: var(--spacing-lg);
+        }
+        @media (max-width: 768px) {
+            .pricing-card.popular {
+                transform: scale(1);
+            }
+        }
+        /* ==================== TESTIMONIALS SECTION ==================== */
+        .testimonials-section {
+            background: linear-gradient(135deg, var(--gray-100) 0%, var(--white) 100%);
+            padding: var(--spacing-3xl) 0;
+        }
+        .testimonials-header {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+        }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-2xl);
+        }
+        .testimonial-card {
+            background-color: var(--white);
+            padding: var(--spacing-2xl);
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+        .stars {
+            color: #FCD34D;
+            font-size: 1.1rem;
+            margin-bottom: var(--spacing-md);
+            letter-spacing: 0.1em;
+        }
+        .testimonial-text {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: var(--spacing-md);
+            font-style: italic;
+        }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+        .author-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .author-info h4 {
+            margin: 0;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+        .author-info p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        /* ==================== FINAL CTA SECTION ==================== */
+        .final-cta {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: var(--spacing-3xl) 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .final-cta-content {
+            position: relative;
+            z-index: 1;
+        }
+        .final-cta h2 {
+            color: var(--white);
+            margin-bottom: var(--spacing-lg);
+        }
+        .final-cta .btn {
+            margin-top: var(--spacing-lg);
+        }
+        /* ==================== FOOTER ==================== */
+        footer {
+            background-color: var(--text-dark);
+            color: var(--white);
+            padding: var(--spacing-2xl) 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-2xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+        .footer-column h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .footer-column ul {
+            list-style: none;
+        }
+        .footer-column ul li {
+            margin-bottom: var(--spacing-sm);
+        }
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        .footer-column a:hover {
+            color: var(--white);
+        }
+        .footer-logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light) 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--spacing-sm);
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+        .footer-copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+        .footer-links {
+            display: flex;
+            gap: var(--spacing-lg);
+            list-style: none;
+        }
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: var(--spacing-sm);
+            }
+        }
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out both;
+        }
+        .feature-card,
+        .problem-card,
+        .step-card,
+        .pricing-card,
+        .testimonial-card {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+        .feature-card:nth-child(5) { animation-delay: 0.5s; }
+        .feature-card:nth-child(6) { animation-delay: 0.6s; }
+        .problem-card:nth-child(1) { animation-delay: 0.1s; }
+        .problem-card:nth-child(2) { animation-delay: 0.2s; }
+        .problem-card:nth-child(3) { animation-delay: 0.3s; }
+        .step-card:nth-child(1) { animation-delay: 0.1s; }
+        .step-card:nth-child(2) { animation-delay: 0.2s; }
+        .step-card:nth-child(3) { animation-delay: 0.3s; }
+        .pricing-card:nth-child(1) { animation-delay: 0.1s; }
+        .pricing-card:nth-child(2) { animation-delay: 0.2s; }
+        .pricing-card:nth-child(3) { animation-delay: 0.3s; }
+        .testimonial-card:nth-child(1) { animation-delay: 0.1s; }
+        .testimonial-card:nth-child(2) { animation-delay: 0.2s; }
+        .testimonial-card:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 4px 6px rgba(91, 33, 182, 0.2);
+            }
+            50% {
+                box-shadow: 0 8px 12px rgba(91, 33, 182, 0.4);
+            }
+        }
+        .btn-primary {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .btn-primary:hover {
+            animation: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER / NAV -->
+    <header>
+        <nav class="container">
+            <div class="logo">Invooro</div>
+            <ul class="nav-links">
+                <li><a href="#features">Fonctionnalités</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="app.html" class="btn btn-primary">Commencer gratuitement</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Vos factures Gmail, organisées en 1 clic</h1>
+                    <p class="subtitle">Invooro trouve, trie et exporte automatiquement toutes vos factures en un fichier Excel prêt pour votre comptable.</p>
+                </div>
+                <div class="hero-cta">
+                    <a href="app.html" class="btn btn-primary btn-large">
+                        Essayer gratuitement — c'est gratuit
+                    </a>
+                    <p class="cta-note">✓ Aucune carte bancaire requise</p>
+                </div>
+                <div class="hero-visual">
+                    <div class="mockup-table-header">
+                        <div>Fournisseur</div>
+                        <div>Montant HT</div>
+                        <div>TVA</div>
+                        <div>Montant TTC</div>
+                        <div>État</div>
+                    </div>
+                    <div class="mockup-row">
+                        <div>SaaS Platform Inc.</div>
+                        <div>150,00 €</div>
+                        <div>31,50 €</div>
+                        <div>181,50 €</div>
+                        <div><span class="status-badge status-success">Valide</span></div>
+                    </div>
+                    <div class="mockup-row">
+                        <div>Agence Web Design</div>
+                        <div>2 500,00 €</div>
+                        <div>525,00 €</div>
+                        <div>3 025,00 €</div>
+                        <div><span class="status-badge status-success">Valide</span></div>
+                    </div>
+                    <div class="mockup-row">
+                        <div>Hébergement Cloud</div>
+                        <div>89,99 €</div>
+                        <div>18,90 €</div>
+                        <div>108,89 €</div>
+                        <div><span class="status-badge status-pending">En attente</span></div>
+                    </div>
+                    <div class="mockup-row">
+                        <div>Outils Productivité</div>
+                        <div>50,00 €</div>
+                        <div>10,50 €</div>
+                        <div>60,50 €</div>
+                        <div><span class="status-badge status-success">Valide</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOCIAL PROOF -->
+    <section class="social-proof">
+        <div class="container">
+            <div class="social-proof-content">
+                <span class="social-proof-text">Utilisé par des freelances chez</span>
+                <div class="logos-grid">
+                    <div class="logo-item">Agence Studio</div>
+                    <div class="logo-item">Conseil & Co</div>
+                    <div class="logo-item">Dev Freelance</div>
+                    <div class="logo-item">CréaNum</div>
+                    <div class="logo-item">WebCom Paris</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEM SECTION -->
+    <section class="problem-section section-padding">
+        <div class="container">
+            <div class="problem-header">
+                <h2>Vous aussi, vous perdez des heures à chercher vos factures ?</h2>
+                <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: var(--spacing-lg) auto 0;">
+                    Les factures éparpillées dans Gmail, les oublis de TVA, et le stress avant la déclaration : c'est fini.
+                </p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">📧</div>
+                    <h3>Factures éparpillées partout</h3>
+                    <p>Vos factures sont noyées dans des milliers d'emails. Impossible de trouver la bonne facture au bon moment.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😅</div>
+                    <h3>Oublis de TVA et erreurs</h3>
+                    <p>Taper chaque facture à la main, c'est fatiguant et source d'erreurs. Risque de malus fiscal.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Stress avant la déclaration</h3>
+                    <p>Avant de voir votre expert-comptable, vous tournez en rond. Les données mal organisées créent du stress.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOLUTION / HOW IT WORKS -->
+    <section class="solution-section section-padding">
+        <div class="container">
+            <div class="solution-header">
+                <h2>Comment ça marche : 3 étapes simples</h2>
+                <p class="subtitle">En moins de 5 minutes, vos factures sont prêtes à envoyer à votre comptable.</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Connectez votre Gmail</h3>
+                    <p>Autorisez Invooro à accéder à vos emails. Connexion sécurisée via OAuth (vos données ne sont jamais stockées).</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Choisissez la période</h3>
+                    <p>Sélectionnez les mois ou l'année à traiter. Invooro scanne et détecte automatiquement toutes les factures.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Téléchargez & partagez</h3>
+                    <p>Un clic, et voilà : Excel formaté + PDFs des factures. Prêt à envoyer à votre comptable ou à votre CAC.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="features-section section-padding" id="features">
+        <div class="container">
+            <div class="features-header">
+                <h2>Pourquoi Invooro ?</h2>
+                <p class="subtitle">Tout ce dont vous avez besoin pour ne plus jamais perdre une facture.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Ultra-rapide</h3>
+                    <p>Retrouvez toutes vos factures en quelques secondes. Pas de saisie manuelle, pas d'ennui.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>100% sécurisé</h3>
+                    <p>Chiffrage de bout en bout. Vos données ne sont jamais persistées. Conforme RGPD.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Format expert-comptable</h3>
+                    <p>Excel pré-formaté avec colonnes HT, TVA, TTC, fournisseur. Prêt à importer directement.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Détection IA</h3>
+                    <p>Reconnaissance optique des factures PDF. Même les vieux e-mails avec pièces jointes sont trouvés.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📲</div>
+                    <h3>Multi-appareils</h3>
+                    <p>Accédez à vos factures depuis votre téléphone, tablette, ou PC. Synchronisation automatique.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Gratuit pour commencer</h3>
+                    <p>Essayez Invooro sans risque. 10 factures/mois gratuitement. Pas de limite de temps.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section class="pricing-section section-padding" id="pricing">
+        <div class="container">
+            <div class="pricing-header">
+                <h2>Pricing simple et transparent</h2>
+                <p class="subtitle">Choisissez le plan qui vous convient. Facturé mensuellement, sans engagement.</p>
+            </div>
+            <div class="pricing-grid">
+                <!-- Gratuit -->
+                <div class="pricing-card">
+                    <div class="pricing-name">Gratuit</div>
+                    <div class="pricing-price">0 €</div>
+                    <div class="pricing-period">par mois</div>
+                    <ul class="pricing-features">
+                        <li>10 factures/mois</li>
+                        <li>1 compte Gmail</li>
+                        <li>Export Excel basique</li>
+                        <li>Support communauté</li>
+                    </ul>
+                    <a href="app.html" class="btn btn-secondary">Commencer gratuitement</a>
+                </div>
+                <!-- Pro (Popular) -->
+                <div class="pricing-card popular">
+                    <div class="popular-badge">Populaire</div>
+                    <div class="pricing-name">Pro</div>
+                    <div class="pricing-price">9 €</div>
+                    <div class="pricing-period">par mois</div>
+                    <ul class="pricing-features">
+                        <li>Factures illimitées</li>
+                        <li>1 compte Gmail</li>
+                        <li>Export Excel avancé</li>
+                        <li>Export PDF factures</li>
+                        <li>Support email</li>
+                    </ul>
+                    <a href="app.html" class="btn btn-primary">Essayer Pro</a>
+                </div>
+                <!-- Business -->
+                <div class="pricing-card">
+                    <div class="pricing-name">Business</div>
+                    <div class="pricing-price">29 €</div>
+                    <div class="pricing-period">par mois</div>
+                    <ul class="pricing-features">
+                        <li>Factures illimitées</li>
+                        <li>Multi-comptes Gmail</li>
+                        <li>Multi-utilisateurs</li>
+                        <li>Intégrations API</li>
+                        <li>Support prioritaire 24/7</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Contacter ventes</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section class="testimonials-section section-padding">
+        <div class="container">
+            <div class="testimonials-header">
+                <h2>Ce que nos utilisateurs disent</h2>
+                <p class="subtitle">Les freelances et entrepreneurs français nous font confiance.</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"J'ai perdu des heures chaque mois à chercher mes factures. Avec Invooro, c'est résolu en 2 minutes. Un vrai game-changer pour mon cabinet."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MD</div>
+                        <div class="author-info">
+                            <h4>Marie Dupont</h4>
+                            <p>Designer freelance</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"L'Excel formaté pour mon comptable fait gagner du temps à tout le monde. Plus d'erreurs, plus de relances. Invooro est indispensable."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JL</div>
+                        <div class="author-info">
+                            <h4>Jean-Louis Mercier</h4>
+                            <p>Consultant IT, dirigeant</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Le meilleur outil pour organiser mes factures. Support réactif, interface intuitive. Je recommande vivement Invooro à tous mes collègues."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SL</div>
+                        <div class="author-info">
+                            <h4>Sophie Laurent</h4>
+                            <p>Agence web, 4 personnes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA SECTION -->
+    <section class="final-cta section-padding" id="cta">
+        <div class="container">
+            <div class="final-cta-content">
+                <h2>Prêt à ne plus jamais perdre une facture ?</h2>
+                <p style="color: rgba(255, 255, 255, 0.95); font-size: 1.1rem; margin-bottom: var(--spacing-lg); max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Rejoignez les centaines de freelances et entrepreneurs qui font confiance à Invooro pour simplifier leur gestion comptable.
+                </p>
+                <a href="app.html" class="btn btn-white btn-large">Commencer gratuitement maintenant</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="footer-logo">Invooro</div>
+                    <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; line-height: 1.6;">
+                        L'outil qui fait retrouver vos factures Gmail en 1 clic. Conçu pour les freelances et petites entreprises françaises.
+                    </p>
+                </div>
+                <div class="footer-column">
+                    <h4>Produit</h4>
+                    <ul>
+                        <li><a href="#features">Fonctionnalités</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Changelog</a></li>
+                        <li><a href="#">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Entreprise</h4>
+                    <ul>
+                        <li><a href="#">À propos</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Carrières</a></li>
+                        <li><a href="#">Presse</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Ressources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API</a></li>
+                        <li><a href="#">Communauté</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; 2026 Invooro. Tous droits réservés.</p>
+                <ul class="footer-links">
+                    <li><a href="#">Conditions d'utilisation</a></li>
+                    <li><a href="#">Politique de confidentialité</a></li>
+                    <li><a href="#">Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Parallax effect on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.backgroundPosition = `0 ${scrolled * 0.5}px`;
+            }
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.feature-card, .problem-card, .step-card, .pricing-card, .testimonial-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Button click feedback
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => { this.style.transform = ''; }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
