@@ -44,31 +44,31 @@
         #loginScreen {
             justify-content: center;
             align-items: center;
-            background: linear-gradient(160deg, #2D1867 0%, #5B21B6 50%, #7C3AED 100%);
+            background: #0C1B33;
             position: relative;
             overflow: hidden;
         }
         #loginScreen::before {
             content: '';
             position: absolute;
-            top: -200px; right: -200px;
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 60%);
+            top: -20%; right: -10%;
+            width: 700px; height: 700px;
+            background: radial-gradient(circle, rgba(201,168,76,.07) 0%, transparent 60%);
             pointer-events: none;
         }
         #loginScreen::after {
             content: '';
             position: absolute;
-            bottom: -150px; left: -150px;
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 60%);
+            bottom: -20%; left: -10%;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(22,99,42,.15) 0%, transparent 60%);
             pointer-events: none;
         }
         .login-container {
-            background: white;
-            border-radius: 20px;
+            background: #FAF8F2;
+            border-radius: 16px;
             padding: 52px 48px;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255,255,255,0.1);
+            box-shadow: 0 48px 96px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(201,168,76,0.15);
             text-align: center;
             max-width: 420px;
             width: 90%;
@@ -82,53 +82,55 @@
         }
         .login-logo-mark {
             width: 52px; height: 52px;
-            background: linear-gradient(135deg, #5B21B6, #8B5CF6);
-            border-radius: 14px;
+            background: #0C1B33;
+            border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
             margin: 0 auto 20px;
-            box-shadow: 0 8px 24px rgba(91,33,182,0.3);
+            box-shadow: 0 8px 24px rgba(12,27,51,0.25);
         }
-        .login-logo-mark svg { width: 26px; height: 26px; color: white; }
+        .login-logo-mark svg { width: 26px; height: 26px; color: #C9A84C; }
         .login-container h1 {
-            font-size: 26px;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 28px;
             font-weight: 800;
-            color: #111827;
+            color: #0C1B33;
             margin-bottom: 8px;
             letter-spacing: -0.5px;
         }
         .login-container > p {
-            color: #6B7280;
+            color: #7A6E5F;
             font-size: 14px;
-            margin-bottom: 32px;
-            line-height: 1.6;
+            margin-bottom: 28px;
+            line-height: 1.65;
         }
         .login-features {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 32px;
+            gap: 9px;
+            margin-bottom: 28px;
             text-align: left;
-            background: #F5F3FF;
-            border-radius: 12px;
-            padding: 16px 18px;
+            background: #F2EEE3;
+            border-radius: 8px;
+            padding: 14px 16px;
+            border: 1px solid #E8E0CC;
         }
         .login-feature-item {
             display: flex;
             align-items: center;
             gap: 10px;
             font-size: 13px;
-            color: #374151;
-            font-weight: 500;
+            color: #3D3328;
+            font-weight: 400;
         }
         .login-feature-icon {
-            width: 22px; height: 22px;
-            background: #EDE9FE;
-            border-radius: 6px;
+            width: 20px; height: 20px;
+            background: #0C1B33;
+            border-radius: 4px;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
-            color: #7C3AED;
+            color: #C9A84C;
         }
-        .login-feature-icon svg { width: 12px; height: 12px; }
+        .login-feature-icon svg { width: 11px; height: 11px; }
         .back-link {
             display: block;
             margin-top: 18px;
@@ -143,32 +145,34 @@
         .login-trust {
             margin-top: 16px;
             font-size: 12px;
-            color: #9CA3AF;
+            color: #B0A898;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
+            font-weight: 400;
         }
-        .login-trust svg { width: 12px; height: 12px; }
+        .login-trust svg { width: 12px; height: 12px; color: #C9A84C; }
         .google-btn {
             width: 100%;
-            padding: 12px 24px;
-            border: 1px solid #D1D5DB;
+            padding: 14px 24px;
+            border: 1.5px solid #E8E0CC;
             border-radius: 8px;
             background: white;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            color: #1A1410;
         }
         .google-btn:hover {
-            background: #F9FAFB;
-            border-color: #9CA3AF;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: #0C1B33;
+            box-shadow: 0 6px 20px rgba(12,27,51,0.12);
+            transform: translateY(-1px);
         }
         .google-btn:active { transform: scale(0.98); }
         .google-icon {
