@@ -4,27 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invooro — Vos factures Gmail, exportées en Excel</title>
-  <meta name="description" content="Invooro extrait automatiquement toutes vos factures Gmail et génère un fichier Excel structuré prêt pour votre comptable.">
+  <meta name="description" content="Invooro extrait automatiquement toutes vos factures Gmail et génère un fichier Excel structuré prêt pour votre comptable. Gratuit, sécurisé, sans installation.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%237C6EFA'/><path d='M9 9h9M9 13h7M9 17h9M9 21h5' stroke='white' stroke-width='2' stroke-linecap='round'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg:       #07080E;
-      --surface:  #0D0F1C;
-      --surface2: #12152A;
-      --border:   rgba(255,255,255,0.07);
-      --border-hi:rgba(255,255,255,0.13);
-      --text:     #E8E8F4;
-      --text-mid: rgba(232,232,244,0.55);
-      --text-low: rgba(232,232,244,0.28);
-      --accent:   #7C6EFA;
-      --accent-hi:#A99FFD;
-      --accent-glow: rgba(124,110,250,0.18);
-      --green:    #4ADE80;
-      --green-dim: rgba(74,222,128,0.12);
-      --amber:    #FBB040;
+      --bg:          #FFFFFF;
+      --surface:     #F7F6FF;
+      --surface2:    #EFF0FF;
+      --border:      rgba(124,110,250,0.12);
+      --border-mid:  rgba(124,110,250,0.2);
+      --text:        #0F0E20;
+      --text-mid:    #5E5C7A;
+      --text-low:    #A09EC0;
+      --accent:      #7C6EFA;
+      --accent-dark: #6558E8;
+      --accent-light:rgba(124,110,250,0.1);
+      --accent-glow: rgba(124,110,250,0.22);
+      --green:       #16A34A;
+      --green-dim:   rgba(22,163,74,0.1);
+      --amber:       #D97706;
+      --red:         #DC2626;
     }
     html { scroll-behavior: smooth; }
     body {
@@ -38,9 +40,9 @@
     /* ===== NAV ===== */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      background: rgba(7,8,14,0.8);
+      background: rgba(255,255,255,0.9);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(124,110,250,0.1);
       padding: 0 48px; height: 64px;
       display: flex; align-items: center; justify-content: space-between;
     }
@@ -48,407 +50,611 @@
       display: flex; align-items: center; gap: 9px;
       text-decoration: none; font-family: 'Syne', sans-serif;
       font-size: 18px; font-weight: 800; color: var(--text);
-      letter-spacing: -.3px;
     }
-    .logo-mark {
-      width: 28px; height: 28px;
+    .nav-logo-mark {
+      width: 30px; height: 30px;
       background: var(--accent);
       border-radius: 7px;
       display: flex; align-items: center; justify-content: center;
     }
-    .logo-mark svg { width: 14px; height: 14px; color: white; }
-    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
-    .nav-links a { font-size: 14px; font-weight: 400; color: var(--text-mid); text-decoration: none; transition: color .18s; }
-    .nav-links a:hover { color: var(--text); }
-    .nav-cta {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 9px 20px; border-radius: 7px;
-      background: var(--accent); color: white;
-      font-size: 13px; font-weight: 500; text-decoration: none;
-      transition: all .18s; letter-spacing: .01em;
-      box-shadow: 0 0 24px var(--accent-glow);
+    .nav-logo-mark svg { width: 17px; height: 17px; color: white; }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; color: var(--text-mid);
+      text-decoration: none; transition: color 0.2s;
     }
-    .nav-cta:hover { background: var(--accent-hi); transform: translateY(-1px); box-shadow: 0 0 32px rgba(124,110,250,0.32); }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta {
+      padding: 9px 20px; background: var(--accent); color: white;
+      border-radius: 8px; font-size: 14px; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(124,110,250,0.3);
+    }
+    .nav-cta:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 4px 14px rgba(124,110,250,0.4);
+      transform: translateY(-1px);
+    }
 
     /* ===== HERO ===== */
     .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
+      padding: 140px 48px 100px;
       text-align: center;
-      padding: 130px 48px 90px;
-      position: relative; overflow: hidden;
+      position: relative;
+      overflow: hidden;
     }
-
-    /* Grid background */
+    /* Soft violet radial glow behind hero */
     .hero::before {
       content: '';
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+      position: absolute;
+      top: -60px; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 600px;
+      background: radial-gradient(ellipse at center, rgba(124,110,250,0.08) 0%, transparent 70%);
       pointer-events: none;
     }
-
-    /* Glow blobs */
-    .hero-glow-1 {
-      position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
-      width: 800px; height: 500px;
-      background: radial-gradient(ellipse, rgba(124,110,250,.14) 0%, transparent 65%);
+    /* Dot grid pattern */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(124,110,250,0.18) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
       pointer-events: none;
     }
-    .hero-glow-2 {
-      position: absolute; bottom: 5%; right: 10%;
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(74,222,128,.06) 0%, transparent 65%);
-      pointer-events: none;
-    }
-
     .hero-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(124,110,250,.1);
-      border: 1px solid rgba(124,110,250,.25);
-      color: var(--accent-hi);
-      padding: 5px 14px; border-radius: 100px;
-      font-size: 12px; font-weight: 500;
-      margin-bottom: 32px; letter-spacing: .04em;
-      animation: fadeUp .6s ease-out both;
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--surface); border: 1px solid var(--border-mid);
+      border-radius: 100px; padding: 5px 14px 5px 8px;
+      font-size: 13px; font-weight: 500; color: var(--accent);
+      margin-bottom: 28px;
+      position: relative; z-index: 1;
+      animation: fadeUp 0.5s ease-out both;
     }
-    .hero-badge span { color: var(--text-mid); margin-left: 4px; }
-
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
     .hero h1 {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(44px, 6.5vw, 80px);
-      font-weight: 800; line-height: 1.05;
-      letter-spacing: -2.5px; color: var(--text);
-      max-width: 880px; margin-bottom: 24px;
-      animation: fadeUp .7s ease-out .1s both;
+      font-size: clamp(42px, 6vw, 70px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -2px;
+      color: var(--text);
+      max-width: 820px;
+      margin: 0 auto 24px;
+      position: relative; z-index: 1;
+      animation: fadeUp 0.5s 0.1s ease-out both;
     }
-    .hero h1 .grad {
-      background: linear-gradient(135deg, var(--accent-hi) 0%, #C084FC 50%, var(--accent) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    .hero h1 .accent-word {
+      color: var(--accent);
+      position: relative;
     }
-
+    .hero h1 .accent-word::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 2px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      border-radius: 2px;
+      opacity: 0.5;
+    }
     .hero-sub {
-      font-size: 18px; font-weight: 300; color: var(--text-mid);
-      max-width: 540px; line-height: 1.75; margin-bottom: 44px;
-      animation: fadeUp .7s ease-out .2s both;
+      font-size: 18px; font-weight: 400; color: var(--text-mid);
+      max-width: 520px; margin: 0 auto 40px;
+      line-height: 1.7;
+      position: relative; z-index: 1;
+      animation: fadeUp 0.5s 0.2s ease-out both;
     }
     .hero-actions {
       display: flex; align-items: center; justify-content: center;
       gap: 14px; flex-wrap: wrap;
-      animation: fadeUp .7s ease-out .3s both;
+      position: relative; z-index: 1;
+      animation: fadeUp 0.5s 0.3s ease-out both;
     }
-    .btn-main {
-      display: inline-flex; align-items: center; gap: 10px;
-      padding: 14px 28px; border-radius: 8px;
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 14px 28px;
       background: var(--accent); color: white;
-      font-size: 15px; font-weight: 500; text-decoration: none;
-      transition: all .18s;
-      box-shadow: 0 0 32px var(--accent-glow);
+      border-radius: 10px; font-size: 15px; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+      box-shadow: 0 4px 16px rgba(124,110,250,0.35);
     }
-    .btn-main:hover { background: var(--accent-hi); transform: translateY(-2px); box-shadow: 0 0 48px rgba(124,110,250,.35); }
+    .btn-primary:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 8px 24px rgba(124,110,250,0.45);
+      transform: translateY(-2px);
+    }
+    .btn-primary svg { width: 16px; height: 16px; }
     .btn-ghost {
       display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 24px; border-radius: 8px;
-      background: rgba(255,255,255,.04); color: var(--text-mid);
-      font-size: 15px; font-weight: 400; text-decoration: none;
-      border: 1px solid var(--border-hi);
-      transition: all .18s;
+      padding: 14px 24px;
+      background: transparent; color: var(--text-mid);
+      border: 1.5px solid var(--border-mid);
+      border-radius: 10px; font-size: 15px; font-weight: 500;
+      text-decoration: none; transition: all 0.2s;
     }
-    .btn-ghost:hover { background: rgba(255,255,255,.07); color: var(--text); border-color: rgba(255,255,255,.2); }
-    .g-icon {
-      width: 18px; height: 18px; flex-shrink: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%234285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="%2334A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="%23FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="%23EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>') no-repeat center / contain;
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-light);
     }
-    .hero-note {
-      margin-top: 20px; font-size: 13px; color: var(--text-low);
-      animation: fadeUp .7s ease-out .4s both;
+    .hero-trust {
+      margin-top: 18px; font-size: 13px; color: var(--text-low);
+      position: relative; z-index: 1;
+      animation: fadeUp 0.5s 0.35s ease-out both;
     }
+    .hero-trust span { color: var(--green); font-weight: 600; }
 
-    /* ===== MOCKUP ===== */
-    .mockup-wrap {
-      position: relative; width: 100%; max-width: 920px;
+    /* Hero mockup */
+    .hero-mockup {
       margin: 64px auto 0;
-      animation: fadeUp .8s ease-out .5s both;
+      max-width: 900px;
+      position: relative; z-index: 1;
+      animation: fadeUp 0.7s 0.4s ease-out both;
     }
-    /* Gradient fade at bottom */
-    .mockup-wrap::after {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-      height: 120px;
-      background: linear-gradient(to bottom, transparent, var(--bg));
-      pointer-events: none; z-index: 1;
+    .hero-mockup-window {
+      background: white;
+      border: 1.5px solid rgba(124,110,250,0.18);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(124,110,250,0.12), 0 4px 20px rgba(0,0,0,0.06);
     }
-    .mockup-frame {
-      border-radius: 14px; overflow: hidden;
-      border: 1px solid var(--border-hi);
-      box-shadow: 0 0 0 1px rgba(124,110,250,.1), 0 40px 80px rgba(0,0,0,.6);
+    .window-bar {
       background: var(--surface);
-    }
-    .mockup-chrome {
-      background: #0A0B14; padding: 12px 16px;
+      padding: 10px 16px;
       display: flex; align-items: center; gap: 8px;
       border-bottom: 1px solid var(--border);
     }
-    .mdot { width: 11px; height: 11px; border-radius: 50%; }
-    .mdot:nth-child(1) { background: #FF5F57; }
-    .mdot:nth-child(2) { background: #FFBD2E; }
-    .mdot:nth-child(3) { background: #28CA41; }
-    .mock-url {
-      flex: 1; margin-left: 8px; background: rgba(255,255,255,.05);
-      border: 1px solid var(--border); border-radius: 5px;
-      padding: 4px 12px; font-size: 12px; color: var(--text-low);
+    .window-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .window-dot.r { background: #FF5F56; }
+    .window-dot.y { background: #FEBC2E; }
+    .window-dot.g { background: #28C840; }
+    .window-title {
+      flex: 1; text-align: center;
+      font-size: 12px; color: var(--text-low); font-weight: 500;
     }
-    .mock-body { display: flex; min-height: 340px; }
-    .mock-sb {
-      width: 200px; background: #09091A; padding: 18px 12px;
-      flex-shrink: 0; border-right: 1px solid var(--border);
+    .window-body {
+      padding: 24px 28px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;
     }
-    .msb-logo { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 24px; padding: 4px 8px; }
-    .msb-logo span { color: var(--accent); }
-    .msb-item { padding: 8px 10px; border-radius: 6px; font-size: 12.5px; color: var(--text-low); margin-bottom: 2px; display: flex; align-items: center; gap: 8px; cursor: default; }
-    .msb-item.on { background: rgba(124,110,250,.12); color: var(--accent-hi); }
-    .msb-item svg { width: 13px; height: 13px; }
-    .mock-content { flex: 1; padding: 20px; }
-    .mock-kpis { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px; }
-    .mkpi { background: rgba(255,255,255,.04); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
-    .mkpi-l { font-size: 10px; color: var(--text-low); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
-    .mkpi-v { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -.5px; }
-    .mkpi-t { font-size: 11px; color: var(--green); margin-top: 2px; }
-    .mock-table-wrap { background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-    .mth { display: grid; grid-template-columns: 2.5fr 1fr 1fr 1fr; padding: 9px 14px; background: rgba(255,255,255,.04); font-size: 10px; font-weight: 600; color: var(--text-low); text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border); }
-    .mtr { display: grid; grid-template-columns: 2.5fr 1fr 1fr 1fr; padding: 10px 14px; font-size: 12.5px; color: var(--text-mid); border-top: 1px solid rgba(255,255,255,.04); align-items: center; }
-    .mtag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; background: var(--green-dim); color: var(--green); }
-    .mtag-w { background: rgba(251,176,64,.1); color: var(--amber); }
-
-    /* ===== STATS ===== */
-    .stats-section {
-      padding: 56px 48px;
-      border-top: 1px solid var(--border);
+    .mock-stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px;
+    }
+    .mock-stat-label { font-size: 11px; color: var(--text-low); font-weight: 500; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .mock-stat-value { font-size: 24px; font-weight: 700; font-family: 'Syne', sans-serif; color: var(--text); }
+    .mock-stat-sub { font-size: 12px; color: var(--green); font-weight: 500; margin-top: 2px; }
+    .window-table { grid-column: 1/-1; }
+    .mock-table-head {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 8px; padding: 8px 12px;
+      font-size: 11px; font-weight: 600; color: var(--text-low);
+      text-transform: uppercase; letter-spacing: 0.5px;
       border-bottom: 1px solid var(--border);
     }
-    .stats-inner { max-width: 1080px; margin: 0 auto; display: flex; justify-content: center; }
-    .stat { flex: 1; text-align: center; padding: 0 40px; position: relative; }
-    .stat + .stat::before {
-      content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-      height: 36px; width: 1px; background: var(--border-hi);
+    .mock-row {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 8px; padding: 10px 12px;
+      font-size: 13px; border-bottom: 1px solid var(--border);
+      align-items: center;
     }
-    .stat-n {
-      font-family: 'Syne', sans-serif;
-      font-size: 40px; font-weight: 800;
-      background: linear-gradient(135deg, var(--text) 0%, var(--text-mid) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      display: block; letter-spacing: -1.5px; line-height: 1; margin-bottom: 6px;
+    .mock-row:last-child { border-bottom: none; }
+    .mock-row:hover { background: var(--surface); }
+    .mock-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 100px;
+      font-size: 11px; font-weight: 600;
     }
-    .stat-l { font-size: 13px; color: var(--text-low); }
-
-    /* ===== LOGOS ===== */
-    .logos-bar {
-      padding: 32px 48px;
-      border-bottom: 1px solid var(--border);
-    }
-    .logos-l { text-align: center; font-size: 11px; font-weight: 600; color: var(--text-low); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 20px; }
-    .logos-row { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
-    .logo-pill { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.2); }
-
-    /* ===== SECTION BASE ===== */
-    .section { padding: 100px 48px; }
-    .section-inner { max-width: 1160px; margin: 0 auto; }
-    .stag { font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .stag::before { content: ''; width: 20px; height: 1px; background: var(--accent); }
-    .sh2 { font-family: 'Syne', sans-serif; font-size: clamp(28px, 3.5vw, 44px); font-weight: 800; line-height: 1.1; letter-spacing: -1.2px; color: var(--text); margin-bottom: 16px; }
-    .ssub { font-size: 17px; font-weight: 300; color: var(--text-mid); max-width: 500px; line-height: 1.75; margin-bottom: 64px; }
-
-    /* ===== FEATURES ===== */
-    .features-grid {
-      display: grid; grid-template-columns: repeat(3,1fr);
-      gap: 1px; background: var(--border);
-      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
-    }
-    .feat {
-      background: var(--bg); padding: 32px;
-      transition: background .2s;
-      position: relative; overflow: hidden;
-    }
-    .feat::before {
+    .mock-badge.green { background: var(--green-dim); color: var(--green); }
+    .mock-badge.amber { background: rgba(217,119,6,0.1); color: var(--amber); }
+    /* gradient fade on mockup bottom */
+    .hero-mockup::after {
       content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
-      opacity: 0; transition: opacity .3s;
-    }
-    .feat:hover { background: var(--surface); }
-    .feat:hover::before { opacity: 1; }
-    .feat-ico {
-      width: 40px; height: 40px;
-      background: rgba(124,110,250,.1);
-      border: 1px solid rgba(124,110,250,.2);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 20px; color: var(--accent-hi);
-    }
-    .feat-ico svg { width: 20px; height: 20px; }
-    .feat-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
-    .feat-desc { font-size: 14px; font-weight: 300; color: var(--text-mid); line-height: 1.75; }
-
-    /* ===== HOW ===== */
-    .how-bg { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; }
-    .step {
-      padding: 56px 40px;
-      border-right: 1px solid var(--border);
-      position: relative;
-    }
-    .step:last-child { border-right: none; }
-    .step-line {
-      position: absolute; top: 68px; right: -1px;
-      width: 1px; height: 24px;
-      background: var(--accent);
-      display: none;
-    }
-    .step-n {
-      font-family: 'Syne', sans-serif;
-      font-size: 11px; font-weight: 700;
-      color: var(--accent); letter-spacing: .1em;
-      text-transform: uppercase; margin-bottom: 24px;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .step-n::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-    .step-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 14px; line-height: 1.2; }
-    .step-desc { font-size: 14px; font-weight: 300; color: var(--text-mid); line-height: 1.8; }
-
-    /* ===== PRICING ===== */
-    .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 760px; margin: 64px auto 0; }
-    .pcard {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: 40px;
-      display: flex; flex-direction: column;
-    }
-    .pcard.hot {
-      background: var(--surface2);
-      border-color: rgba(124,110,250,.35);
-      position: relative;
-      box-shadow: 0 0 0 1px rgba(124,110,250,.1), 0 24px 48px rgba(124,110,250,.08);
-    }
-    .p-pill {
-      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
-      background: var(--accent); color: white;
-      font-size: 11px; font-weight: 600; padding: 3px 14px;
-      border-radius: 100px; white-space: nowrap; letter-spacing: .06em;
-    }
-    .p-tier { font-size: 12px; font-weight: 600; color: var(--text-low); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
-    .p-price { margin-bottom: 8px; }
-    .p-price strong { font-family: 'Syne', sans-serif; font-size: 52px; font-weight: 800; color: var(--text); letter-spacing: -2px; line-height: 1; }
-    .pcard.hot .p-price strong { color: var(--accent-hi); }
-    .p-price span { font-size: 14px; color: var(--text-low); margin-left: 4px; }
-    .p-desc { font-size: 14px; font-weight: 300; color: var(--text-mid); margin-bottom: 32px; line-height: 1.65; }
-    .p-list { list-style: none; display: flex; flex-direction: column; gap: 11px; flex: 1; margin-bottom: 36px; }
-    .p-list li { font-size: 14px; font-weight: 300; color: var(--text-mid); display: flex; align-items: flex-start; gap: 10px; }
-    .p-ck { width: 16px; height: 16px; border-radius: 50%; background: var(--green-dim); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-    .p-ck svg { width: 9px; height: 9px; color: var(--green); }
-    .pcard.hot .p-ck { background: rgba(124,110,250,.15); }
-    .pcard.hot .p-ck svg { color: var(--accent-hi); }
-    .p-btn {
-      display: flex; align-items: center; justify-content: center;
-      padding: 13px; border-radius: 8px;
-      font-size: 14px; font-weight: 500; text-decoration: none;
-      border: 1px solid var(--border-hi); color: var(--text-mid);
-      background: transparent; transition: all .18s;
-    }
-    .p-btn:hover { border-color: var(--text-mid); color: var(--text); }
-    .p-btn.p-main { background: var(--accent); border-color: var(--accent); color: white; box-shadow: 0 0 24px var(--accent-glow); }
-    .p-btn.p-main:hover { background: var(--accent-hi); box-shadow: 0 0 36px rgba(124,110,250,.35); }
-
-    /* ===== TESTIMONIALS ===== */
-    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-    .tcard {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 28px;
-      transition: border-color .2s, box-shadow .2s;
-    }
-    .tcard:hover { border-color: var(--border-hi); box-shadow: 0 8px 32px rgba(0,0,0,.3); }
-    .t-stars { color: var(--amber); font-size: 13px; letter-spacing: 2px; margin-bottom: 16px; }
-    .t-text { font-size: 14px; font-weight: 300; color: var(--text-mid); line-height: 1.8; margin-bottom: 24px; }
-    .t-sep { width: 28px; height: 1px; background: var(--border-hi); margin-bottom: 18px; }
-    .t-name { font-size: 13px; font-weight: 600; color: var(--text); }
-    .t-role { font-size: 12px; color: var(--text-low); margin-top: 2px; }
-
-    /* ===== CTA ===== */
-    .cta-wrap {
-      padding: 100px 48px; text-align: center;
-      position: relative; overflow: hidden;
-      border-top: 1px solid var(--border);
-    }
-    .cta-wrap::before {
-      content: ''; position: absolute;
-      top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 700px; height: 400px;
-      background: radial-gradient(ellipse, rgba(124,110,250,.1) 0%, transparent 65%);
+      position: absolute;
+      left: 0; right: 0; bottom: 0; height: 120px;
+      background: linear-gradient(to bottom, transparent, white);
       pointer-events: none;
     }
-    .cta-eye { font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; display: block; }
-    .cta-wrap h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(34px, 5vw, 58px); font-weight: 800;
-      letter-spacing: -1.5px; color: var(--text);
-      margin-bottom: 18px; line-height: 1.08;
-    }
-    .cta-wrap h2 span {
-      background: linear-gradient(135deg, var(--accent-hi), #C084FC);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .cta-wrap p { font-size: 17px; font-weight: 300; color: var(--text-mid); margin-bottom: 48px; }
-    .cta-btn {
-      display: inline-flex; align-items: center; gap: 12px;
-      padding: 16px 36px; border-radius: 8px;
-      background: var(--accent); color: white;
-      font-size: 16px; font-weight: 500; text-decoration: none;
-      transition: all .18s; box-shadow: 0 0 36px var(--accent-glow);
-    }
-    .cta-btn:hover { background: var(--accent-hi); transform: translateY(-2px); box-shadow: 0 0 60px rgba(124,110,250,.4); }
-    .cta-note { margin-top: 18px; font-size: 13px; color: var(--text-low); }
 
-    /* ===== FOOTER ===== */
-    footer {
-      padding: 64px 48px 36px;
-      border-top: 1px solid var(--border);
-      background: #05060B;
-    }
-    .footer-inner { max-width: 1160px; margin: 0 auto; }
-    .footer-top { display: flex; gap: 80px; flex-wrap: wrap; margin-bottom: 56px; }
-    .footer-brand { flex: 1.5; min-width: 200px; }
-    .footer-logo { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); text-decoration: none; display: block; margin-bottom: 12px; }
-    .footer-brand p { font-size: 14px; font-weight: 300; color: var(--text-low); line-height: 1.7; max-width: 240px; }
-    .footer-col { flex: 1; min-width: 130px; }
-    .footer-col h4 { font-size: 11px; font-weight: 600; color: var(--text-low); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 16px; }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-col a { font-size: 14px; font-weight: 300; color: rgba(232,232,244,0.3); text-decoration: none; transition: color .18s; }
-    .footer-col a:hover { color: var(--text); }
-    .footer-bottom { border-top: 1px solid var(--border); padding-top: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 13px; color: var(--text-low); font-weight: 300; }
-
-    /* ===== ANIMATIONS ===== */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* ===== STATS BAR ===== */
+    .stats-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      padding: 28px 48px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 0;
+    }
+    .stat-item {
+      flex: 1; text-align: center; max-width: 220px;
+      padding: 0 32px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px; font-weight: 800;
+      color: var(--accent); line-height: 1;
+    }
+    .stat-label { font-size: 13px; color: var(--text-mid); margin-top: 4px; }
+
+    /* ===== LOGOS ===== */
+    .logos {
+      padding: 52px 48px;
+      text-align: center;
+    }
+    .logos-label {
+      font-size: 13px; font-weight: 500;
+      color: var(--text-low); text-transform: uppercase;
+      letter-spacing: 1px; margin-bottom: 24px;
+    }
+    .logos-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 48px; flex-wrap: wrap;
+    }
+    .logos-row span {
+      font-size: 16px; font-weight: 700; color: var(--text-low);
+      letter-spacing: -0.5px; opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+    .logos-row span:hover { opacity: 0.8; }
+
+    /* ===== FEATURES ===== */
+    .features {
+      padding: 100px 48px;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .section-label {
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 1.5px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(30px, 4vw, 44px);
+      font-weight: 800; line-height: 1.15;
+      letter-spacing: -1.5px; color: var(--text);
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 17px; color: var(--text-mid);
+      max-width: 500px; line-height: 1.65;
+    }
+    .features-header { margin-bottom: 56px; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .feat-card {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .feat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+      border-radius: 2px 2px 0 0;
+    }
+    .feat-card:hover {
+      border-color: var(--border-mid);
+      box-shadow: 0 8px 32px rgba(124,110,250,0.1);
+      transform: translateY(-3px);
+    }
+    .feat-card:hover::before { transform: scaleX(1); }
+    .feat-icon {
+      width: 44px; height: 44px;
+      background: var(--accent-light);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+      color: var(--accent);
+    }
+    .feat-icon svg { width: 22px; height: 22px; }
+    .feat-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px; font-weight: 700;
+      color: var(--text); margin-bottom: 8px;
+    }
+    .feat-card p { font-size: 14px; color: var(--text-mid); line-height: 1.6; }
+
+    /* ===== HOW IT WORKS ===== */
+    .how {
+      padding: 100px 48px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .how-inner { max-width: 1100px; margin: 0 auto; }
+    .how-header { margin-bottom: 60px; }
+    .how-steps {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+      position: relative;
+    }
+    /* horizontal connector line */
+    .how-steps::before {
+      content: '';
+      position: absolute;
+      top: 24px; left: calc(33.33% - 0px); right: calc(33.33% - 0px);
+      height: 1px;
+      background: linear-gradient(90deg, var(--border-mid), var(--border-mid));
+      border-top: 1px dashed rgba(124,110,250,0.3);
+    }
+    .how-step { position: relative; }
+    .how-num {
+      width: 48px; height: 48px;
+      background: var(--accent);
+      color: white; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 18px; font-weight: 800;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 14px rgba(124,110,250,0.3);
+    }
+    .how-step h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px; font-weight: 700;
+      color: var(--text); margin-bottom: 8px;
+    }
+    .how-step p { font-size: 14px; color: var(--text-mid); line-height: 1.65; }
+
+    /* ===== PRICING ===== */
+    .pricing {
+      padding: 100px 48px;
+      max-width: 1100px; margin: 0 auto;
+      text-align: center;
+    }
+    .pricing-header { margin-bottom: 56px; }
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px; text-align: left;
+    }
+    .price-card {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 16px; padding: 32px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .price-card:hover {
+      box-shadow: 0 8px 32px rgba(124,110,250,0.1);
+      transform: translateY(-3px);
+    }
+    .price-card.hot {
+      border-color: var(--accent);
+      background: linear-gradient(160deg, #FDFCFF 0%, #F0EEFF 100%);
+      box-shadow: 0 8px 32px rgba(124,110,250,0.18);
+      position: relative;
+    }
+    .price-hot-badge {
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: white;
+      font-size: 11px; font-weight: 700;
+      padding: 4px 14px; border-radius: 100px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .price-name {
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; color: var(--accent); margin-bottom: 12px;
+    }
+    .price-amount {
+      font-family: 'Syne', sans-serif;
+      font-size: 40px; font-weight: 800;
+      color: var(--text); line-height: 1;
+    }
+    .price-amount sup { font-size: 20px; vertical-align: top; margin-top: 4px; }
+    .price-amount sub { font-size: 14px; color: var(--text-mid); font-weight: 400; vertical-align: baseline; }
+    .price-desc {
+      font-size: 14px; color: var(--text-mid);
+      margin: 10px 0 24px; line-height: 1.55;
+    }
+    .price-features { list-style: none; margin-bottom: 28px; display: flex; flex-direction: column; gap: 10px; }
+    .price-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14px; color: var(--text-mid); line-height: 1.5;
+    }
+    .price-features li::before {
+      content: '';
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--green-dim);
+      flex-shrink: 0; margin-top: 2px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 8l3 3 5-5' stroke='%2316A34A' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size: contain;
+    }
+    .price-card.hot .price-features li::before {
+      background-color: var(--accent-light);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 8l3 3 5-5' stroke='%237C6EFA' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    }
+    .btn-plan {
+      display: block; width: 100%;
+      padding: 13px 20px; border-radius: 10px;
+      font-size: 14px; font-weight: 600;
+      text-align: center; text-decoration: none;
+      transition: all 0.2s; cursor: pointer; border: none;
+    }
+    .btn-plan-outline {
+      background: transparent; color: var(--accent);
+      border: 1.5px solid var(--border-mid);
+    }
+    .btn-plan-outline:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+    }
+    .btn-plan-fill {
+      background: var(--accent); color: white;
+      box-shadow: 0 4px 14px rgba(124,110,250,0.3);
+    }
+    .btn-plan-fill:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 6px 20px rgba(124,110,250,0.4);
+      transform: translateY(-1px);
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials {
+      padding: 100px 48px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+    .testimonials-inner { max-width: 1100px; margin: 0 auto; }
+    .testimonials-header { margin-bottom: 52px; }
+    .testi-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .testi-card {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 14px; padding: 28px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .testi-card:hover {
+      box-shadow: 0 8px 28px rgba(124,110,250,0.1);
+      transform: translateY(-2px);
+    }
+    .testi-stars {
+      display: flex; gap: 3px; margin-bottom: 16px;
+    }
+    .testi-stars span { color: var(--amber); font-size: 14px; }
+    .testi-card blockquote {
+      font-size: 14px; color: var(--text-mid);
+      line-height: 1.7; margin-bottom: 20px;
+      font-style: italic;
+    }
+    .testi-author {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .testi-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; color: var(--accent);
+    }
+    .testi-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .testi-role { font-size: 12px; color: var(--text-low); }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      padding: 120px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(124,110,250,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-section h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800; line-height: 1.15;
+      letter-spacing: -1.5px; color: var(--text);
+      max-width: 680px; margin: 0 auto 20px;
+      position: relative; z-index: 1;
+    }
+    .cta-section p {
+      font-size: 17px; color: var(--text-mid);
+      max-width: 440px; margin: 0 auto 36px;
+      line-height: 1.65; position: relative; z-index: 1;
+    }
+    .cta-section .cta-actions { position: relative; z-index: 1; display: flex; gap: 14px; justify-content: center; }
+    .cta-note {
+      margin-top: 16px; font-size: 13px; color: var(--text-low);
+      position: relative; z-index: 1;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--text);
+      padding: 56px 48px 32px;
+      color: rgba(255,255,255,0.5);
+    }
+    .footer-top {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 48px;
+      gap: 32px; flex-wrap: wrap;
+    }
+    .footer-brand { max-width: 260px; }
+    .footer-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 17px; font-weight: 800; color: white;
+      text-decoration: none; margin-bottom: 12px;
+    }
+    .footer-logo-mark {
+      width: 26px; height: 26px; border-radius: 6px;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .footer-logo-mark svg { width: 15px; height: 15px; color: white; }
+    .footer-brand p { font-size: 13px; line-height: 1.65; }
+    .footer-links { display: flex; gap: 64px; flex-wrap: wrap; }
+    .footer-col h4 {
+      font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7);
+      text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px;
+    }
+    .footer-col a {
+      display: block; font-size: 14px; color: rgba(255,255,255,0.45);
+      text-decoration: none; margin-bottom: 8px; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: rgba(255,255,255,0.85); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom span { font-size: 13px; }
+    .footer-badges { display: flex; gap: 12px; }
+    .footer-badge {
+      display: flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px; padding: 4px 10px;
+      font-size: 12px; color: rgba(255,255,255,0.5);
+    }
+    .footer-badge svg { width: 12px; height: 12px; }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 900px) {
-      nav { padding: 0 20px; }
+      nav { padding: 0 24px; }
       .nav-links { display: none; }
-      .hero { padding: 100px 20px 60px; }
-      .section, .how-bg .section, .cta-wrap, footer, .stats-section, .logos-bar, .pricing-wrap { padding-left: 20px; padding-right: 20px; }
-      .hero h1 { letter-spacing: -1.5px; }
-      .features-grid { grid-template-columns: 1fr; }
-      .steps { grid-template-columns: 1fr; }
-      .step { border-right: none; border-bottom: 1px solid var(--border); }
-      .step:last-child { border-bottom: none; }
-      .pricing-grid { grid-template-columns: 1fr; }
-      .testi-grid { grid-template-columns: 1fr; }
-      .mock-sb { display: none; }
-      .mock-kpis { grid-template-columns: 1fr 1fr; }
-      .footer-top { flex-direction: column; gap: 40px; }
+      .hero { padding: 120px 24px 80px; }
+      .stats-bar { flex-wrap: wrap; gap: 24px; padding: 28px 24px; }
+      .stat-item { border-right: none; padding: 0; min-width: 120px; }
+      .features, .pricing, .how { padding: 72px 24px; }
+      .testimonials { padding: 72px 24px; }
+      .cta-section { padding: 80px 24px; }
+      footer { padding: 48px 24px 28px; }
+      .features-grid, .pricing-grid, .testi-grid, .how-steps { grid-template-columns: 1fr; }
+      .footer-top { flex-direction: column; }
+      .logos { padding: 40px 24px; }
+      .logos-row { gap: 28px; }
+      .window-body { grid-template-columns: 1fr; }
+      .mock-table-head, .mock-row { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -456,82 +662,91 @@
 
 <!-- NAV -->
 <nav>
-  <a href="/" class="nav-logo">
-    <div class="logo-mark">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
     </div>
     Invooro
   </a>
-  <ul class="nav-links">
-    <li><a href="#features">Fonctionnalités</a></li>
-    <li><a href="#how">Comment ça marche</a></li>
-    <li><a href="#pricing">Tarifs</a></li>
-  </ul>
-  <a href="/app.html" class="nav-cta">
-    <span class="g-icon"></span>
-    Commencer gratuitement
-  </a>
+  <div class="nav-links">
+    <a href="#features">Fonctionnalités</a>
+    <a href="#how">Comment ça marche</a>
+    <a href="#pricing">Tarifs</a>
+    <a href="app.html" class="nav-cta">Commencer gratuitement</a>
+  </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-glow-1"></div>
-  <div class="hero-glow-2"></div>
-
-  <div class="hero-badge">✦ Pour TPE · PME · Freelances <span>· Auto-entrepreneurs</span></div>
-
-  <h1>Vos factures Gmail<br><span class="grad">exportées en Excel.</span></h1>
-
-  <p class="hero-sub">
-    Invooro scanne votre Gmail, extrait chaque facture par IA et génère un tableau Excel structuré prêt pour votre comptable — en moins d'une minute.
-  </p>
-
-  <div class="hero-actions">
-    <a href="/app.html" class="btn-main">
-      <span class="g-icon"></span>
-      Commencer avec Google
-    </a>
-    <a href="#how" class="btn-ghost">Voir la démo →</a>
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    Gratuit · Aucune installation · OAuth 2.0
   </div>
+  <h1>Vos factures Gmail,<br><span class="accent-word">exportées en Excel</span><br>en 1 minute</h1>
+  <p class="hero-sub">Invooro scanne automatiquement votre boîte Gmail, extrait toutes vos factures par IA et génère un fichier Excel prêt pour votre comptable.</p>
+  <div class="hero-actions">
+    <a href="app.html" class="btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Connecter mon Gmail
+    </a>
+    <a href="#how" class="btn-ghost">Voir comment ça marche →</a>
+  </div>
+  <p class="hero-trust"><span>Gratuit</span> · Aucun mot de passe stocké · Données non revendues</p>
 
-  <p class="hero-note">Gratuit · Aucune carte bancaire · OAuth 2.0 sécurisé · RGPD</p>
-
-  <!-- App mockup embedded in hero -->
-  <div class="mockup-wrap">
-    <div class="mockup-frame">
-      <div class="mockup-chrome">
-        <div class="mdot"></div><div class="mdot"></div><div class="mdot"></div>
-        <div class="mock-url">invooro.com/app — Tableau de bord</div>
+  <div class="hero-mockup">
+    <div class="hero-mockup-window">
+      <div class="window-bar">
+        <div class="window-dot r"></div>
+        <div class="window-dot y"></div>
+        <div class="window-dot g"></div>
+        <div class="window-title">Invooro — Tableau de bord</div>
       </div>
-      <div class="mock-body">
-        <div class="mock-sb">
-          <div class="msb-logo">Invoo<span>ro</span></div>
-          <div class="msb-item on">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-            Tableau de bord
-          </div>
-          <div class="msb-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
-            Factures
-          </div>
-          <div class="msb-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/><path d="M20 21H4"/></svg>
-            Export
-          </div>
+      <div class="window-body">
+        <div class="mock-stat">
+          <div class="mock-stat-label">Factures trouvées</div>
+          <div class="mock-stat-value">47</div>
+          <div class="mock-stat-sub">↑ ce trimestre</div>
         </div>
-        <div class="mock-content">
-          <div class="mock-kpis">
-            <div class="mkpi"><div class="mkpi-l">Factures</div><div class="mkpi-v">47</div><div class="mkpi-t">↑ +12 ce mois</div></div>
-            <div class="mkpi"><div class="mkpi-l">Total HT</div><div class="mkpi-v">8 240 €</div><div class="mkpi-t">ce trimestre</div></div>
-            <div class="mkpi"><div class="mkpi-l">TVA</div><div class="mkpi-v">1 648 €</div><div class="mkpi-t">déductible</div></div>
+        <div class="mock-stat">
+          <div class="mock-stat-label">Montant total HT</div>
+          <div class="mock-stat-value">8 340 €</div>
+          <div class="mock-stat-sub">↑ vs trimestre préc.</div>
+        </div>
+        <div class="mock-stat">
+          <div class="mock-stat-label">Fournisseurs</div>
+          <div class="mock-stat-value">23</div>
+          <div class="mock-stat-sub">dont 3 nouveaux</div>
+        </div>
+        <div class="window-table">
+          <div class="mock-table-head">
+            <span>Fournisseur</span>
+            <span>Date</span>
+            <span>Montant HT</span>
+            <span>Statut</span>
           </div>
-          <div class="mock-table-wrap">
-            <div class="mth"><span>Fournisseur</span><span>Date</span><span>HT</span><span>Statut</span></div>
-            <div class="mtr"><span>Adobe Inc.</span><span>15/03</span><span>59,99 €</span><span><span class="mtag">Extrait</span></span></div>
-            <div class="mtr"><span>OVH Cloud</span><span>12/03</span><span>14,40 €</span><span><span class="mtag">Extrait</span></span></div>
-            <div class="mtr"><span>Notion Labs</span><span>10/03</span><span>16,00 €</span><span><span class="mtag">Extrait</span></span></div>
-            <div class="mtr"><span>Figma Inc.</span><span>01/03</span><span>45,00 €</span><span><span class="mtag">Extrait</span></span></div>
-            <div class="mtr"><span>Shopify</span><span>28/02</span><span>29,00 €</span><span><span class="mtag mtag-w">À vérifier</span></span></div>
+          <div class="mock-row">
+            <span>OVH Cloud</span>
+            <span style="color:var(--text-mid)">15 mars 2026</span>
+            <span style="font-weight:600">29,99 €</span>
+            <span><span class="mock-badge green">Extrait</span></span>
+          </div>
+          <div class="mock-row">
+            <span>Adobe Creative</span>
+            <span style="color:var(--text-mid)">12 mars 2026</span>
+            <span style="font-weight:600">59,99 €</span>
+            <span><span class="mock-badge green">Extrait</span></span>
+          </div>
+          <div class="mock-row">
+            <span>Mailchimp</span>
+            <span style="color:var(--text-mid)">10 mars 2026</span>
+            <span style="font-weight:600">45,00 €</span>
+            <span><span class="mock-badge amber">En attente</span></span>
+          </div>
+          <div class="mock-row">
+            <span>Notion Pro</span>
+            <span style="color:var(--text-mid)">8 mars 2026</span>
+            <span style="font-weight:600">16,00 €</span>
+            <span><span class="mock-badge green">Extrait</span></span>
           </div>
         </div>
       </div>
@@ -539,213 +754,284 @@
   </div>
 </section>
 
-<!-- STATS -->
-<div class="stats-section">
-  <div class="stats-inner">
-    <div class="stat"><span class="stat-n">127+</span><span class="stat-l">équipes utilisatrices</span></div>
-    <div class="stat"><span class="stat-n">15 000+</span><span class="stat-l">factures traitées</span></div>
-    <div class="stat"><span class="stat-n">4,9 / 5</span><span class="stat-l">satisfaction client</span></div>
-    <div class="stat"><span class="stat-n">&lt; 1 min</span><span class="stat-l">par extraction</span></div>
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">2 min</div>
+    <div class="stat-label">temps moyen d'extraction</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">98%</div>
+    <div class="stat-label">précision d'extraction IA</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">0 €</div>
+    <div class="stat-label">coût pour les TPE/PME</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">RGPD</div>
+    <div class="stat-label">lecture seule, données FR</div>
   </div>
 </div>
 
 <!-- LOGOS -->
-<div class="logos-bar">
-  <p class="logos-l">Compatible avec vos outils</p>
+<section class="logos">
+  <p class="logos-label">Factures extraites depuis</p>
   <div class="logos-row">
-    <span class="logo-pill">Gmail</span>
-    <span class="logo-pill">Google Workspace</span>
-    <span class="logo-pill">Excel</span>
-    <span class="logo-pill">Google Sheets</span>
-    <span class="logo-pill">Pennylane</span>
-    <span class="logo-pill">Sage</span>
-    <span class="logo-pill">QuickBooks</span>
+    <span>OVH</span>
+    <span>Adobe</span>
+    <span>AWS</span>
+    <span>Stripe</span>
+    <span>Notion</span>
+    <span>Scaleway</span>
+    <span>Mailchimp</span>
+    <span>Shopify</span>
   </div>
-</div>
+</section>
 
 <!-- FEATURES -->
-<section class="section" id="features">
-  <div class="section-inner">
-    <div class="stag">Fonctionnalités</div>
-    <h2 class="sh2">Tout ce qu'il faut pour votre<br>comptabilité fournisseurs</h2>
-    <p class="ssub">Fini les heures perdues à fouiller vos emails. Invooro automatise toute la collecte, de la détection à l'export.</p>
-    <div class="features-grid">
-      <div class="feat">
-        <div class="feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-        <div class="feat-title">Scan Gmail intelligent</div>
-        <p class="feat-desc">Détection automatique de tous les emails contenant des factures, reçus et justificatifs — Gmail personnel ou Google Workspace.</p>
+<section class="features" id="features">
+  <div class="features-header">
+    <div class="section-label">Fonctionnalités</div>
+    <h2 class="section-title">Tout ce qu'il faut pour<br>votre comptabilité</h2>
+    <p class="section-sub">Arrêtez de chercher vos factures à la main. Invooro fait le travail en quelques secondes.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </div>
-      <div class="feat">
-        <div class="feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <div class="feat-title">Extraction IA des données</div>
-        <p class="feat-desc">Montant HT, TVA, TTC, date, numéro et fournisseur extraits automatiquement depuis les PDFs — même les formats exotiques.</p>
+      <h3>Extraction automatique par IA</h3>
+      <p>Notre IA parcourt votre Gmail et détecte toutes les factures — PDF, HTML, reçus — quel que soit le format ou le fournisseur.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
       </div>
-      <div class="feat">
-        <div class="feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg></div>
-        <div class="feat-title">Export Excel prêt comptable</div>
-        <p class="feat-desc">Tableau structuré prêt à envoyer à votre expert-comptable ou à importer dans Pennylane, Sage ou QuickBooks.</p>
+      <h3>Export Excel structuré</h3>
+      <p>Toutes les données sont organisées dans un tableau Excel prêt à remettre à votre comptable : fournisseur, date, montant HT/TTC, TVA.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </div>
-      <div class="feat">
-        <div class="feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
-        <div class="feat-title">Archive PDF des justificatifs</div>
-        <p class="feat-desc">Toutes vos factures originales dans un ZIP organisé. Indispensable pour les obligations de conservation légale sur 10 ans.</p>
+      <h3>ZIP des pièces jointes</h3>
+      <p>Téléchargez en un clic le ZIP de tous vos PDFs de factures, nommés et organisés automatiquement par date et fournisseur.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       </div>
-      <div class="feat">
-        <div class="feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <div class="feat-title">Sécurité & conformité RGPD</div>
-        <p class="feat-desc">Accès lecture seule via OAuth 2.0. Aucun email ni facture stocké sur nos serveurs. Données effacées après traitement.</p>
+      <h3>Sécurité OAuth 2.0</h3>
+      <p>Connexion via Google — aucun mot de passe stocké chez nous. Accès en lecture seule à vos emails. Conforme RGPD.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       </div>
-      <div class="feat">
-        <div class="feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
-        <div class="feat-title">Moins d'une minute</div>
-        <p class="feat-desc">Une année de factures scannée en quelques secondes. Ce qui prenait 3 heures ne prend plus que 45 secondes.</p>
+      <h3>Filtrage par période</h3>
+      <p>Choisissez précisément la plage de dates à analyser : ce mois, ce trimestre, cette année fiscale, ou une période personnalisée.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h3>Résultats en 2 minutes</h3>
+      <p>Pas d'installation, pas de configuration. Connectez votre Gmail, lancez l'analyse, exportez. C'est tout.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="how-inner">
+    <div class="how-header">
+      <div class="section-label">Comment ça marche</div>
+      <h2 class="section-title">Prêt en 3 étapes</h2>
+      <p class="section-sub">Aucune installation requise. Tout se passe dans votre navigateur.</p>
+    </div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-num">1</div>
+        <h3>Connectez votre Gmail</h3>
+        <p>Cliquez sur "Connexion avec Google". Vous autorisez Invooro à lire vos emails en lecture seule via OAuth 2.0. Aucun mot de passe, aucun stockage de données.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">2</div>
+        <h3>Lancez l'extraction</h3>
+        <p>Sélectionnez la période souhaitée et cliquez sur "Analyser". Notre IA parcourt vos emails, détecte les factures et extrait automatiquement toutes les données.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">3</div>
+        <h3>Exportez en 1 clic</h3>
+        <p>Téléchargez votre fichier Excel structuré et/ou le ZIP de tous vos PDFs. Partagez-le directement avec votre comptable ou intégrez-le à votre logiciel.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HOW -->
-<div class="how-bg" id="how">
-  <div class="section-inner" style="max-width:1160px;margin:0 auto;">
-    <div style="padding:80px 48px 0;">
-      <div class="stag">Comment ça marche</div>
-      <h2 class="sh2" style="margin-bottom:0">3 étapes, c'est tout.</h2>
-    </div>
-    <div class="steps" style="margin-top:48px;">
-      <div class="step">
-        <div class="step-n">Étape 01</div>
-        <h3 class="step-title">Connectez votre Gmail</h3>
-        <p class="step-desc">Un clic avec votre compte Google. Accès lecture uniquement. Aucun mot de passe stocké. Gmail personnel et Google Workspace supportés.</p>
-      </div>
-      <div class="step">
-        <div class="step-n">Étape 02</div>
-        <h3 class="step-title">Définissez la période</h3>
-        <p class="step-desc">Ce mois, trimestre, année fiscale ou une période personnalisée. Notre IA parcourt vos emails et extrait chaque facture automatiquement.</p>
-      </div>
-      <div class="step">
-        <div class="step-n">Étape 03</div>
-        <h3 class="step-title">Exportez et envoyez</h3>
-        <p class="step-desc">Téléchargez votre Excel comptable et votre archive ZIP. Envoyez directement à votre comptable ou importez dans votre logiciel.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- PRICING -->
-<section class="section" id="pricing" style="background:var(--surface);border-top:1px solid var(--border);max-width:none;padding:100px 48px;">
-  <div class="section-inner" style="text-align:center;">
-    <div class="stag" style="justify-content:center;">Tarifs</div>
-    <h2 class="sh2">Simple et transparent</h2>
-    <p style="font-size:17px;font-weight:300;color:var(--text-mid)">Commencez gratuitement, évoluez si besoin.</p>
-    <div class="pricing-grid">
-      <div class="pcard">
-        <div class="p-tier">Gratuit</div>
-        <div class="p-price"><strong>0 €</strong><span>/mois</span></div>
-        <p class="p-desc">Idéal pour tester ou les petits volumes.</p>
-        <ul class="p-list">
-          <li><div class="p-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>50 factures par mois</li>
-          <li><div class="p-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Export Excel inclus</li>
-          <li><div class="p-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>1 compte Gmail</li>
-          <li><div class="p-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>OAuth 2.0 sécurisé</li>
-        </ul>
-        <a href="/app.html" class="p-btn">Commencer gratuitement</a>
-      </div>
-      <div class="pcard hot">
-        <div class="p-pill">✦ POPULAIRE</div>
-        <div class="p-tier">Pro</div>
-        <div class="p-price"><strong>9 €</strong><span>/mois HT</span></div>
-        <p class="p-desc">Pour les entreprises avec un volume régulier.</p>
-        <ul class="p-list">
-          <li><div class="p-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><strong style="color:var(--text)">Factures illimitées</strong></li>
-          <li><div class="p-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Export Excel + ZIP PDF</li>
-          <li><div class="p-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Plusieurs comptes Gmail</li>
-          <li><div class="p-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Historique illimité</li>
-          <li><div class="p-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Support prioritaire</li>
-        </ul>
-        <a href="/app.html" class="p-btn p-main">Essai gratuit 14 jours →</a>
-      </div>
+<section class="pricing" id="pricing">
+  <div class="pricing-header">
+    <div class="section-label">Tarifs</div>
+    <h2 class="section-title">Simple et transparent</h2>
+    <p class="section-sub" style="margin:0 auto">Commencez gratuitement, sans carte bancaire.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-name">Gratuit</div>
+      <div class="price-amount">0 €<sub>/mois</sub></div>
+      <p class="price-desc">Pour les freelances et auto-entrepreneurs qui débutent.</p>
+      <ul class="price-features">
+        <li>Jusqu'à 50 factures / mois</li>
+        <li>Export Excel</li>
+        <li>Filtrage par date</li>
+        <li>OAuth 2.0 sécurisé</li>
+      </ul>
+      <a href="app.html" class="btn-plan btn-plan-outline">Commencer gratuitement</a>
+    </div>
+    <div class="price-card hot">
+      <div class="price-hot-badge">⚡ Le plus populaire</div>
+      <div class="price-name">Pro</div>
+      <div class="price-amount"><sup>€</sup>19<sub>/mois</sub></div>
+      <p class="price-desc">Pour les TPE, PME et freelances actifs avec beaucoup de fournisseurs.</p>
+      <ul class="price-features">
+        <li>Factures illimitées</li>
+        <li>Export Excel + ZIP PDF</li>
+        <li>Catégorisation automatique</li>
+        <li>Historique 24 mois</li>
+        <li>Support prioritaire</li>
+      </ul>
+      <a href="app.html" class="btn-plan btn-plan-fill">Essayer Pro gratuitement</a>
+    </div>
+    <div class="price-card">
+      <div class="price-name">Équipe</div>
+      <div class="price-amount"><sup>€</sup>49<sub>/mois</sub></div>
+      <p class="price-desc">Pour les cabinets comptables et équipes multi-comptes.</p>
+      <ul class="price-features">
+        <li>Jusqu'à 5 comptes Gmail</li>
+        <li>Tableau de bord centralisé</li>
+        <li>Export consolidé</li>
+        <li>API d'intégration</li>
+        <li>Support dédié</li>
+      </ul>
+      <a href="mailto:hello@invooro.com" class="btn-plan btn-plan-outline">Contacter l'équipe</a>
     </div>
   </div>
 </section>
 
 <!-- TESTIMONIALS -->
-<section class="section" style="border-top:1px solid var(--border);">
-  <div class="section-inner">
-    <div class="stag">Témoignages</div>
-    <h2 class="sh2" style="margin-bottom:56px">Des heures récupérées<br>chaque trimestre</h2>
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <div class="testimonials-header">
+      <div class="section-label">Témoignages</div>
+      <h2 class="section-title">Ils gagnent du temps</h2>
+    </div>
     <div class="testi-grid">
-      <div class="tcard">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-text">Avant je passais 3h à rassembler les factures avant chaque déclaration de TVA. Maintenant c'est 2 minutes chrono. Invooro est devenu indispensable.</p>
-        <div class="t-sep"></div>
-        <div class="t-name">Sarah M.</div>
-        <div class="t-role">Dirigeante TPE · Paris</div>
+      <div class="testi-card">
+        <div class="testi-stars">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <blockquote>"J'avais l'habitude de passer 2h par mois à chercher mes factures dans Gmail. Avec Invooro, c'est 5 minutes et mon comptable reçoit tout directement."</blockquote>
+        <div class="testi-author">
+          <div class="testi-avatar">ML</div>
+          <div>
+            <div class="testi-name">Marie-Laure B.</div>
+            <div class="testi-role">Consultante indépendante, Lyon</div>
+          </div>
+        </div>
       </div>
-      <div class="tcard">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-text">Je gère la compta de 12 clients PME. Invooro me fait gagner une demi-journée par client à chaque clôture. L'export Excel est parfait pour Pennylane.</p>
-        <div class="t-sep"></div>
-        <div class="t-name">Thomas B.</div>
-        <div class="t-role">Expert-comptable · Lyon</div>
+      <div class="testi-card">
+        <div class="testi-stars">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <blockquote>"En tant que gérant d'une petite agence, je jongle avec des dizaines de fournisseurs SaaS. Invooro les capture tous sans rien manquer. Impeccable."</blockquote>
+        <div class="testi-author">
+          <div class="testi-avatar">TR</div>
+          <div>
+            <div class="testi-name">Thomas R.</div>
+            <div class="testi-role">Gérant, agence digitale Paris</div>
+          </div>
+        </div>
       </div>
-      <div class="tcard">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-text">Notre DAF cherchait un outil simple pour automatiser la collecte fournisseurs. Invooro coche toutes les cases : rapide, sécurisé, conforme RGPD.</p>
-        <div class="t-sep"></div>
-        <div class="t-name">Amina K.</div>
-        <div class="t-role">Responsable financière PME · Bordeaux</div>
+      <div class="testi-card">
+        <div class="testi-stars">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <blockquote>"Simple, rapide, sécurisé. Mon expert-comptable m'a demandé comment j'avais fait — maintenant il le recommande à tous ses clients."</blockquote>
+        <div class="testi-author">
+          <div class="testi-avatar">SV</div>
+          <div>
+            <div class="testi-name">Sophie V.</div>
+            <div class="testi-role">Auto-entrepreneur, e-commerce</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
-<section class="cta-wrap">
-  <span class="cta-eye">Rejoignez 127+ équipes</span>
-  <h2>Prêt à récupérer<br><span>des heures chaque mois ?</span></h2>
-  <p>Automatisez votre collecte de factures en moins de 5 minutes.</p>
-  <a href="/app.html" class="cta-btn">
-    <span class="g-icon"></span>
-    Commencer gratuitement avec Google
-  </a>
-  <p class="cta-note">Gratuit · Aucune carte bancaire · Connexion OAuth 2.0</p>
+<section class="cta-section">
+  <h2>Prêt à récupérer 2h par mois ?</h2>
+  <p>Connectez votre Gmail en 30 secondes. Gratuit, sans carte bancaire, sans installation.</p>
+  <div class="cta-actions">
+    <a href="app.html" class="btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Commencer gratuitement
+    </a>
+  </div>
+  <p class="cta-note">✓ Gratuit &nbsp;·&nbsp; ✓ Aucune installation &nbsp;·&nbsp; ✓ Conforme RGPD</p>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <a href="/" class="footer-logo">Invooro</a>
-        <p>La gestion automatique de factures Gmail pour toutes les entreprises françaises.</p>
-      </div>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="footer-logo">
+        <div class="footer-logo-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        </div>
+        Invooro
+      </a>
+      <p>Extraction automatique de factures Gmail. Simple, rapide, sécurisé. Pour les freelances, TPE et PME françaises.</p>
+    </div>
+    <div class="footer-links">
       <div class="footer-col">
         <h4>Produit</h4>
-        <ul>
-          <li><a href="#features">Fonctionnalités</a></li>
-          <li><a href="#how">Comment ça marche</a></li>
-          <li><a href="#pricing">Tarifs</a></li>
-          <li><a href="/app.html">Se connecter</a></li>
-        </ul>
+        <a href="#features">Fonctionnalités</a>
+        <a href="#how">Comment ça marche</a>
+        <a href="#pricing">Tarifs</a>
+        <a href="app.html">Se connecter</a>
       </div>
       <div class="footer-col">
         <h4>Légal</h4>
-        <ul>
-          <li><a href="#">Confidentialité</a></li>
-          <li><a href="#">Conditions d'utilisation</a></li>
-          <li><a href="#">Mentions légales</a></li>
-        </ul>
+        <a href="#">Politique de confidentialité</a>
+        <a href="#">CGU</a>
+        <a href="#">Mentions légales</a>
+        <a href="#">RGPD</a>
       </div>
       <div class="footer-col">
         <h4>Contact</h4>
-        <ul><li><a href="mailto:hello@invooro.com">hello@invooro.com</a></li></ul>
+        <a href="mailto:hello@invooro.com">hello@invooro.com</a>
+        <a href="#">Support</a>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Invooro. Tous droits réservés.</span>
-      <span>Conçu pour les entreprises françaises 🇫🇷</span>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Invooro · Tous droits réservés</span>
+    <div class="footer-badges">
+      <div class="footer-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        OAuth 2.0
+      </div>
+      <div class="footer-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        RGPD
+      </div>
     </div>
   </div>
 </footer>
+
 </body>
 </html>
