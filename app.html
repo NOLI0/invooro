@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invooro - Gestion Intelligente de Factures</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Invooro — Connexion</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%235B21B6'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,sans-serif' font-weight='800' font-size='18' fill='white'>i</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -43,35 +44,94 @@
         #loginScreen {
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #5B21B6 0%, #8B5CF6 100%);
+            background: linear-gradient(160deg, #2D1867 0%, #5B21B6 50%, #7C3AED 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        #loginScreen::before {
+            content: '';
+            position: absolute;
+            top: -200px; right: -200px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        #loginScreen::after {
+            content: '';
+            position: absolute;
+            bottom: -150px; left: -150px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 60%);
+            pointer-events: none;
         }
         .login-container {
             background: white;
-            border-radius: 12px;
-            padding: 60px 50px;
-            box-shadow: 0 20px 60px rgba(91, 33, 182, 0.15);
+            border-radius: 20px;
+            padding: 52px 48px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255,255,255,0.1);
             text-align: center;
-            max-width: 400px;
-            animation: slideUp 0.6s ease-out;
+            max-width: 420px;
+            width: 90%;
+            animation: slideUp 0.5s ease-out;
+            position: relative;
+            z-index: 1;
         }
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(24px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .login-container h1 {
-            font-size: 32px;
-            font-weight: 700;
-            color: #5B21B6;
-            margin-bottom: 12px;
+        .login-logo-mark {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, #5B21B6, #8B5CF6);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 24px rgba(91,33,182,0.3);
         }
-        .login-container p {
+        .login-logo-mark svg { width: 26px; height: 26px; color: white; }
+        .login-container h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        .login-container > p {
             color: #6B7280;
             font-size: 14px;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
+            line-height: 1.6;
         }
+        .login-features {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 32px;
+            text-align: left;
+            background: #F5F3FF;
+            border-radius: 12px;
+            padding: 16px 18px;
+        }
+        .login-feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #374151;
+            font-weight: 500;
+        }
+        .login-feature-icon {
+            width: 22px; height: 22px;
+            background: #EDE9FE;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            color: #7C3AED;
+        }
+        .login-feature-icon svg { width: 12px; height: 12px; }
         .back-link {
             display: block;
-            margin-top: 20px;
+            margin-top: 18px;
             font-size: 13px;
             color: #9CA3AF;
             text-decoration: none;
@@ -80,6 +140,16 @@
         .back-link:hover {
             color: #5B21B6;
         }
+        .login-trust {
+            margin-top: 16px;
+            font-size: 12px;
+            color: #9CA3AF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .login-trust svg { width: 12px; height: 12px; }
         .google-btn {
             width: 100%;
             padding: 12px 24px;
@@ -565,12 +635,33 @@
     <!-- LOGIN SCREEN -->
     <div id="loginScreen" class="screen active">
         <div class="login-container">
+            <div class="login-logo-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+            </div>
             <h1>Invooro</h1>
-            <p>Retrouvez vos factures Gmail en quelques secondes</p>
+            <p>Connectez votre Gmail et exportez toutes vos factures en Excel en moins d'une minute.</p>
+            <div class="login-features">
+                <div class="login-feature-item">
+                    <div class="login-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    Extraction automatique par IA
+                </div>
+                <div class="login-feature-item">
+                    <div class="login-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    Export Excel & ZIP PDF en 1 clic
+                </div>
+                <div class="login-feature-item">
+                    <div class="login-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    Accès lecture seule · RGPD compliant
+                </div>
+            </div>
             <button class="google-btn" onclick="realLogin(event)">
                 <div class="google-icon"></div>
                 Se connecter avec Google
             </button>
+            <div class="login-trust">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Gratuit · Aucun mot de passe stocké · OAuth 2.0
+            </div>
             <a href="index.html" class="back-link">← Retour à l'accueil</a>
         </div>
     </div>
