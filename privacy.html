@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Politique de confidentialité — Invooro</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%237C6EFA'/><path d='M9 9h9M9 13h7M9 17h9M9 21h5' stroke='white' stroke-width='2' stroke-linecap='round'/></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;color:#0F0E20;background:#fff;line-height:1.7}
+    nav{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(124,110,250,.1);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;z-index:100}
+    .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#0F0E20}
+    .nav-mark{width:28px;height:28px;background:#7C6EFA;border-radius:6px;display:flex;align-items:center;justify-content:center}
+    .nav-mark svg{width:15px;height:15px;color:#fff}
+    .container{max-width:740px;margin:0 auto;padding:104px 24px 80px}
+    h1{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;letter-spacing:-1px;margin-bottom:8px}
+    .updated{font-size:13px;color:#A09EC0;margin-bottom:48px}
+    h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin:40px 0 12px;color:#0F0E20}
+    p,li{font-size:15px;color:#5E5C7A;margin-bottom:10px}
+    ul{padding-left:20px;margin-bottom:10px}
+    a{color:#7C6EFA;text-decoration:none}
+    a:hover{text-decoration:underline}
+    .highlight{background:#F7F6FF;border:1px solid rgba(124,110,250,.15);border-radius:10px;padding:20px 24px;margin:20px 0}
+    .highlight p{margin:0;color:#0F0E20;font-weight:500}
+    footer{text-align:center;padding:32px;font-size:13px;color:#A09EC0;border-top:1px solid rgba(124,110,250,.1)}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></div>
+    Invooro
+  </a>
+  <a href="/" style="font-size:14px;color:#5E5C7A;text-decoration:none">← Retour à l'accueil</a>
+</nav>
+
+<div class="container">
+  <h1>Politique de confidentialité</h1>
+  <p class="updated">Dernière mise à jour : 26 mars 2026</p>
+
+  <div class="highlight">
+    <p>🔒 Invooro ne stocke aucune donnée de vos emails. L'accès à votre Gmail est en lecture seule, traité dans votre navigateur, et révocable à tout moment.</p>
+  </div>
+
+  <h2>1. Qui sommes-nous</h2>
+  <p>Invooro est un service en ligne accessible à l'adresse <a href="https://invooro.com">invooro.com</a>, développé et exploité par Nour Laaroussi (nourlaaroussi321@gmail.com). Invooro permet aux utilisateurs d'extraire automatiquement leurs factures depuis Gmail et de les exporter au format Excel.</p>
+
+  <h2>2. Données collectées</h2>
+  <p>Invooro collecte uniquement les données strictement nécessaires à son fonctionnement :</p>
+  <ul>
+    <li><strong>Adresse email Google</strong> : utilisée uniquement pour identifier votre session via OAuth 2.0.</li>
+    <li><strong>Contenu des emails Gmail</strong> : accès en lecture seule aux emails contenant des factures, traité localement dans votre navigateur. Aucun contenu d'email n'est transmis ni stocké sur nos serveurs.</li>
+  </ul>
+  <p>Nous ne collectons pas : votre mot de passe, vos contacts, vos autres emails, ni aucune donnée bancaire ou financière personnelle.</p>
+
+  <h2>3. Utilisation des données</h2>
+  <p>Les données accédées via l'API Gmail sont utilisées exclusivement pour :</p>
+  <ul>
+    <li>Identifier et extraire les emails contenant des factures ou reçus de paiement</li>
+    <li>Structurer les informations de facturation (fournisseur, date, montant HT/TTC)</li>
+    <li>Générer le fichier Excel téléchargé par l'utilisateur</li>
+  </ul>
+  <p><strong>Aucune donnée extraite de Gmail n'est partagée avec des tiers, revendue, utilisée à des fins publicitaires ou stockée après votre session.</strong></p>
+
+  <h2>4. Accès OAuth Google</h2>
+  <p>Invooro utilise le protocole OAuth 2.0 de Google pour accéder à votre Gmail. Cela signifie :</p>
+  <ul>
+    <li>Vous autorisez explicitement l'accès via votre compte Google</li>
+    <li>L'accès est en lecture seule (<code>gmail.readonly</code>) — Invooro ne peut ni envoyer, ni modifier, ni supprimer vos emails</li>
+    <li>Vous pouvez révoquer cet accès à tout moment via <a href="https://myaccount.google.com/permissions" target="_blank">myaccount.google.com/permissions</a></li>
+  </ul>
+  <p>L'utilisation des données obtenues via les API Google est conforme à la <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank">Politique des services API Google</a>, y compris les exigences relatives aux données utilisateur.</p>
+
+  <h2>5. Stockage et sécurité</h2>
+  <p>Le traitement des emails s'effectue directement dans votre navigateur. Aucune donnée issue de vos emails n'est transmise à nos serveurs. Seul un token d'authentification Google (jeton OAuth) est conservé temporairement dans votre session de navigateur pour maintenir votre connexion, et est supprimé à la déconnexion.</p>
+
+  <h2>6. Partage des données</h2>
+  <p>Invooro ne vend, ne loue et ne partage aucune donnée personnelle avec des tiers. Aucune donnée n'est transmise à des partenaires publicitaires ou à des services d'analyse tiers.</p>
+
+  <h2>7. Vos droits (RGPD)</h2>
+  <p>Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez des droits suivants :</p>
+  <ul>
+    <li><strong>Droit d'accès</strong> : connaître les données que nous détenons sur vous</li>
+    <li><strong>Droit de rectification</strong> : corriger des données inexactes</li>
+    <li><strong>Droit à l'effacement</strong> : demander la suppression de vos données</li>
+    <li><strong>Droit à la portabilité</strong> : recevoir vos données dans un format lisible</li>
+    <li><strong>Droit d'opposition</strong> : vous opposer au traitement de vos données</li>
+  </ul>
+  <p>Pour exercer ces droits, contactez-nous à : <a href="mailto:nourlaaroussi321@gmail.com">nourlaaroussi321@gmail.com</a></p>
+
+  <h2>8. Cookies</h2>
+  <p>Invooro n'utilise pas de cookies publicitaires ni de traceurs tiers. Seuls des cookies fonctionnels (session de connexion) sont utilisés pour maintenir votre authentification.</p>
+
+  <h2>9. Modifications</h2>
+  <p>Nous nous réservons le droit de modifier cette politique à tout moment. En cas de modification significative, nous en informerons les utilisateurs via l'interface de l'application. La date de dernière mise à jour est indiquée en haut de ce document.</p>
+
+  <h2>10. Contact</h2>
+  <p>Pour toute question relative à cette politique de confidentialité :<br>
+  Email : <a href="mailto:nourlaaroussi321@gmail.com">nourlaaroussi321@gmail.com</a><br>
+  Site : <a href="https://invooro.com">invooro.com</a></p>
+</div>
+
+<footer>© 2026 Invooro · <a href="/terms.html">Conditions d'utilisation</a> · <a href="/">Accueil</a></footer>
+</body>
+</html>
